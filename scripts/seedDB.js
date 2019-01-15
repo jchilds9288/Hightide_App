@@ -8,25 +8,39 @@ mongoose.connect(
 
 const taskSeed = [
     {
-    title: "Do Push Ups, Sit Ups, and Pull Ups"
+    title: "Do Push Ups, Sit Ups, and Pull Ups",
+    points: 3,
+    taskAccomplished: false
     },
     {
-    title: "Reach out to a Friend"
+    title: "Reach out to a Friend",
+    points: 5,
+    taskAccomplished: false
     },
     {
-    title: "Go out to lunch with a biz Contact"
+    title: "Go out to lunch with a biz Contact",
+    points: 3,
+    taskAccomplished: false
     },
     {
-    title: "Play Fetch with hatch"
+    title: "Play Fetch with hatch",
+    points: 1,
+    taskAccomplished: false
     },
     {
-    title: "Eat a Vegetable"
+    title: "Eat a Vegetable",
+    points: 1,
+    taskAccomplished: false
     },
     {
-    title: "Cook Dinner"
+    title: "Cook Dinner",
+    points: 5,
+    taskAccomplished: false
     },
     {
-    title: "Go see a Movie"
+    title: "Go see a Movie",
+    points: 1,
+    taskAccomplished: false
     },
 ];
 
