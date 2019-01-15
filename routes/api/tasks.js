@@ -9,6 +9,7 @@ router.route("/")
 
 // Matches with "/api/tasks/:id"
 router.route("/:id")
+  .get(taskController.findById)
   .delete(taskController.remove);
 
 module.exports = router;
