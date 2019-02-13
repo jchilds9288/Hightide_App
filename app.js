@@ -7,7 +7,8 @@ const  createError = require('http-errors'),
        mongoose = require("mongoose"),
        routes = require("./routes"),
        port = process.env.PORT || 3001,
-       app = express();
+       app = express(),
+       passport = require("passport")
 
 // Define middleware here
 app.use(logger('dev'));
@@ -15,7 +16,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize())
+app.use(passport.session()) // will call the deserializeUser
 app.use(routes);
+
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + ' public/index.html'))
 });
