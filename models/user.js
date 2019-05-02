@@ -14,7 +14,13 @@ const UserSchema = new Schema({
     }, 
     select: false, 
     required: true 
-  }
+  },
+    task: [
+        {
+            type: Schema.Types.ObjectId,
+            ref:"Task"
+        }
+    ]
 });
 
 UserSchema.set('toJSON', {getters: true, virtuals: true});

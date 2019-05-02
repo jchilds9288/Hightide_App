@@ -10,13 +10,14 @@ require('../../passport')();
 // Matches with "/api/transactions/auth
 router.route('/auth/google')
     .post(passport.authenticate('google-token', {session: false}), function(req, res, next) {
+        console.log('auth route :: ', req.user)
         if (!req.user) {
             return res.send(401, 'User Not Authenticated');
         }
         req.auth = {
-            id: req.user.id
+            id: req.user._id
         };
-
+        console.log('before next in auth route....')
         next();
     }, generateToken, sendToken);
 

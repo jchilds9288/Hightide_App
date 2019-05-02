@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "",
-    "dev": "concurrently \"node app.js\" \"cd client && yarn start\"",
+    "dev": "concurrently \"nodemon app.js\" \"cd client && yarn start\"",
     "seed": "node scripts/seedDB.js"
   },
   "dependencies": {
@@ -20,6 +20,7 @@
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.3.14",
     "morgan": "~1.9.0",
+    "nodemon": "^1.18.10",
     "passport": "^0.4.0",
     "passport-google-token": "^0.1.2",
     "react": "^16.8.1",
