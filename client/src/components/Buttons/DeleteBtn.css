@@ -1,0 +1,66 @@
+/* * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+   */
+  
+  .outer {
+    position: absolute;
+    margin-left: 87%;
+    width: 30px;
+    margin-top: -34px;
+    cursor: pointer;
+  }
+  
+  .inner {
+    width: inherit;
+    text-align: center;
+  }
+  
+  label { 
+    font-size: .5em; 
+    line-height: 2em;
+    text-transform: uppercase;
+    color: rgb(255, 7, 7);
+    transition: all .3s ease-in;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .inner:before, .inner:after {
+    position: absolute;
+    content: '';
+    height: 1px;
+    width: inherit;
+    background: rgb(255, 7, 7);
+    left: 0;
+    transition: all .3s ease-in;
+  }
+  
+  .inner:before {
+    top: 50%; 
+    transform: rotate(45deg);  
+  }
+  
+  .inner:after {  
+    bottom: 50%;
+    transform: rotate(-45deg);  
+  }
+  
+  .outer:hover label {
+    opacity: 1;
+  }
+  
+  .outer:hover .inner:before,
+  .outer:hover .inner:after {
+    transform: rotate(0);
+  }
+  
+  .outer:hover .inner:before {
+    top: 0;
+  }
+  
+  .outer:hover .inner:after {
+    bottom: 0;
+  }
