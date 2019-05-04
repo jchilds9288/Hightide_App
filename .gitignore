@@ -1,3 +1,4 @@
 node_modules/
-config/
-build/
+client/build/
+config/build/node_modules/
+./config.js
