@@ -1,7 +1,7 @@
 'use strict';
 
 var passport = require('passport');
-const db = require("./models");
+const db = require("./server/db/models");
 var GoogleTokenStrategy = require('passport-google-token').Strategy;
 var config = require('./config');
 

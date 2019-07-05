@@ -1,22 +1,38 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {Redirect} from "react-router-dom";
 import {Col, Row, Container} from '../../components/Grid';
 import { GoogleLogin } from 'react-google-login';
 import config from '../../config.json';
+import { makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 // import API from '../../utils/API';
+const useStyles = makeStyles(theme => ({
+  google: {
+    width: '100%',
+    margin: 'auto',
+    textAlign: 'center',
+    height: '100%',
+    color: 'black',
+    fontWeight: 'bold'
+  }
+}));
 
-class Login extends Component {
-    state = {
-        isAuthenticated: false,
-        user: null,
-    };
-    
-    onFailure = (error) => {
+export default function Login() {
+
+    const [userInfo, setUser] = useState({
+      isAuthenticated: false,
+      user: null,
+      token: null
+    });
+
+    const classes = useStyles();
+
+    const onFailure = (error) => {
         alert(error);
     }
 
-    googleResponse = (response) => {
+    const googleResponse = (response) => {
         const tokenBlob = new Blob([JSON.stringify({ access_token: response.accessToken }, null, 2)], {type: 'application/json' });
         const options = {
             method: 'POST',
@@ -30,46 +46,42 @@ class Login extends Component {
                 console.log('User authenticated :: ', user);
                 if (token) {
                     sessionStorage.setItem('user', JSON.stringify(user));
-                    this.setState({isAuthenticated: true, user, token})
+                    setUser({
+                      isAuthenticated: true,
+                      user,
+                      token
+                    })
+                    console.log(`found: ${JSON.stringify(user)}`)
                 }
             });
         })
     };
 
-    render(){
-        let content = !!this.state.isAuthenticated ?
-        (
-            <Redirect to="/Profile" />
-        ) :
-        (
-            <div>
-                 <Container fluid>
-                    <Row>
-                        <Col size="md-4">
-                            <div>
-                                <GoogleLogin
-                                    clientId={config.GOOGLE_CLIENT_ID}
-                                    buttonText="Login"
-                                    onSuccess={this.googleResponse}
-                                    onFailure={this.googleResponse}
-                                />
-                            </div>
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
-        );
+    let content = !!userInfo.isAuthenticated ?
+    (
+        <Redirect to="/Profile" />
+    ) :
+    (
+        <div>
+             <Container fluid>
+                <Row>
+                    <Col size="md-12" className={classes.google}>
+                            <GoogleLogin
+                                clientId={config.GOOGLE_CLIENT_ID}
+                                buttonText="Login Using Your Google Account"
+                                onSuccess={googleResponse}
+                                onFailure={googleResponse}
+                                className={classes.google}
+                            />
+                    </Col>
+                </Row>
+            </Container>
+        </div>
+    );
 
-        return (
-            <div className='App'>
-                {content}
-            </div>
-        );
-    }
+    return (
+        <div className='App'>
+            {content}
+        </div>
+    );
 }
-
-export default Login;
-
-
-
-

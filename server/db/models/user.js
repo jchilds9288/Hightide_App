@@ -7,13 +7,13 @@ const UserSchema = new Schema({
     trim: true, unique: true,
     match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
   },
-  googleProvider: { 
-    type: { 
-      id: String, 
-      token: String 
-    }, 
-    select: false, 
-    required: true 
+  googleProvider: {
+    type: {
+      id: String,
+      token: String
+    },
+    select: false,
+    required: true
   }
 });
 
@@ -47,6 +47,6 @@ UserSchema.statics.upsertGoogleUser = function(accessToken, refreshToken, profil
   });
 };
 
-const User = mongoose.model("user", UserSchema);
+mongoose.model("user", UserSchema);
 
-module.exports = User;
+module.exports = UserSchema;

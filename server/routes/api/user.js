@@ -1,8 +1,8 @@
 const router = require("express").Router();
 // const controller = require("../../controller/controller");
-var { generateToken, sendToken } = require('../../utils/token.utils');
+var { generateToken, sendToken } = require('../../../utils/token.utils');
 var passport = require('passport');
-require('../../passport')();
+require('../../../passport')();
 
 // router.route("/user")
 //   .post(controller.createUser);

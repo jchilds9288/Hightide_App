@@ -5,10 +5,11 @@ const  createError = require('http-errors'),
        logger = require('morgan'),
        bodyParser = require("body-parser"),
        mongoose = require("mongoose"),
-       routes = require("./routes"),
+       routes = require("./server/routes"),
        port = process.env.PORT || 3001,
        app = express(),
-       passport = require("passport")
+       passport = require("passport"),
+       { DATABASE_URI } = require(path.join(__dirname, './server/env'));
 
 // Define middleware here
 app.use(logger('dev'));
@@ -36,7 +37,7 @@ app.use(function(err, req, res, next) {
 });
 
 // Connect to the Mongo DB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/hightidedb", { useNewUrlParser: true }, console.log("mongoose good"));
+mongoose.connect(DATABASE_URI, { useNewUrlParser: true }, console.log("mongoose good"));
 
 app.listen(port, () => {
   console.log('Server started on port: ' + port);
