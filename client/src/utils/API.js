@@ -13,7 +13,7 @@ export default {
 
     getTask: (id) => {
         return axios.get("/api/tasks/" + id)
-    }, 
+    },
 
     addTask: (taskData) => {
         if (!user){
@@ -28,5 +28,14 @@ export default {
 
     updateTask:(id) => {
         return axios.put("/api/tasks/" + id)
+    },
+
+    addUser:(userData) => {
+      console.log(`adding ${JSON.stringify(userData)}`)
+        return axios.post("/api/user", userData)
+    },
+
+    login:(userData) => {
+        return axios.post("/api/user/login", userData)
     }
 };

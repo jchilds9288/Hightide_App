@@ -1,10 +1,9 @@
-import React, {Component, useState} from 'react';
+import React, {useState} from 'react';
 import {Redirect} from "react-router-dom";
 import {Col, Row, Container} from '../../components/Grid';
 import { GoogleLogin } from 'react-google-login';
 import config from '../../config.json';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 
 // import API from '../../utils/API';
 const useStyles = makeStyles(theme => ({

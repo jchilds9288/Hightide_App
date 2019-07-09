@@ -20,4 +20,5 @@ const poolSchema = new Schema ({
 //     .find({ playlists: this._id })
 // }
 
-module.exports = mongoose.model('Pool', poolSchema)
+mongoose.model('Pool', poolSchema);
+module.exports = poolSchema;

@@ -1,10 +1,14 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const Pool = require('./pool');
+const User = require('./user');
 
 const taskSchema = new Schema ({
     title: {type: String, required: true},
     points: {type: Number, required: true},
-    proofRequired: {type: Boolean, default: false}
+    proofRequired: {type: Boolean, default: false},
+    pool: {type: Pool, default: null},
+    user: {type: User, required: true}
 });
 
 // schema.methods.getAlbums = function() {
@@ -19,4 +23,5 @@ const taskSchema = new Schema ({
 //     .find({ playlists: this._id })
 // }
 
-module.exports = mongoose.model('Task', taskSchema)
+mongoose.model('Task', taskSchema)
+module.exports = taskSchema;

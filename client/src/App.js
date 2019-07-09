@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-import Login from "./pages/Login";
+import {SignUp} from "./pages/SignUp";
 
 const App = () => (
   <Router>
@@ -10,7 +10,9 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/Profile" component={Profile} />
-        <Route exact path="/Login" component={Login} />
+        <Route exact path="/Login" component={Home} />
+        <Route exact path="/Signup" type="signup" component={Home} />
+
       </Switch>
     </div>
   </Router>
