@@ -4,7 +4,6 @@ const User = require('./user');
 
 const poolSchema = new Schema ({
     name: {type: String, required: true},
-    members: {type: [User], required: true, default: []},
     created: {type: Date, default: Date.now}
 });
 

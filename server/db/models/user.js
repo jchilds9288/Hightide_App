@@ -23,7 +23,7 @@ const UserSchema = new Schema({
     trim: true,
     default: 'student'
   }
-});
+}, {autoIndex: false});
 
 UserSchema.set('toJSON', {getters: true, virtuals: true});
 

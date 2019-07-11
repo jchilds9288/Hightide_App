@@ -3,7 +3,8 @@ const db = require("../server/db/models");
 
 mongoose.connect(
     process.env.MONGODB_URI ||
-    "mongodb://localhost/hightidedb"
+    "mongodb://localhost/hightidedb",
+    { autoIndex: false }
 );
 
 const taskSeed = [
@@ -47,28 +48,65 @@ const taskSeed = [
 const userSeed = [
     {
     email: "ches@gmail.com",
-    googleProvider: "ya29.QQIBibTwvKkE39hY8mdkT_mXZoRh7Ub9cK9hNsqrxem4QJ6sQa36VHfyuBe"
+    password: "pw"
     },
 ];
 
-db.Task.remove({})
-    .then(() => db.Task.collection.insertMany(taskSeed))
-    .then(data => {
-        console.log(data.result.n + " records inserted!");
-        const User = mongoose.model("user", db.User);
 
-        User.remove({})
-            .then(() => User.collection.insertMany(userSeed))
-            .then(data => {
-                console.log(data.result.n + " records inserted!");
-                process.exit(0);
-            })
-            .catch(err => {
-                console.log(err);
-                process.exit(1);
-            });
+const Task = mongoose.model("Task", db.Task);
+const User = mongoose.model("User", db.User);
+const Pool = mongoose.model("Pool", db.Pool);
+
+Promise.all([
+    Task.remove({}),
+    User.remove({}),
+    Pool.remove({}),
+]).then(() => {
+    Promise.all([
+      User.collection.insertMany(userSeed)
+    ]).then(([users]) => {
+      console.log(`i did: ${JSON.stringify(users)}`)
+      taskSeed.forEach(task => {
+        console.log(`checking ${JSON.stringify(users.ops[0])}`)
+        console.log(`checking ${JSON.stringify(task)}`)
+        task.user = users.ops[0]
+        console.log(`finished ${JSON.stringify(task)}`)
+
+      });
+      console.log(`i did tasds: ${JSON.stringify(taskSeed)}`)
+
+      Task.collection.insertMany(taskSeed)
+        .then(data => {
+          console.log(data.result.n + " records inserted!");
+        })
+        .catch(err => {
+            console.log(err);
+            process.exit(1);
+        });
     })
-    .catch(err => {
-        console.log(err);
-        process.exit(1);
-    });
+})
+.catch(err => {
+    console.log(err);
+    process.exit(1);
+});
+
+// Task.remove({})
+//     .then(() => Task.collection.insertMany(taskSeed))
+//     .then(data => {
+//         console.log(data.result.n + " records inserted!");
+//
+//         User.remove({})
+//             .then(() => User.collection.insertMany(userSeed))
+//             .then(data => {
+//                 console.log(data.result.n + " records inserted!");
+//                 process.exit(0);
+//             })
+//             .catch(err => {
+//                 console.log(err);
+//                 process.exit(1);
+//             });
+//     })
+//     .catch(err => {
+//         console.log(err);
+//         process.exit(1);
+//     });

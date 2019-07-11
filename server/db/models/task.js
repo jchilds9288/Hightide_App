@@ -7,21 +7,10 @@ const taskSchema = new Schema ({
     title: {type: String, required: true},
     points: {type: Number, required: true},
     proofRequired: {type: Boolean, default: false},
-    pool: {type: Pool, default: null},
+    pool: {type: Pool, required: false},
     user: {type: User, required: true}
-});
+}, {autoIndex: false});
 
-// schema.methods.getAlbums = function() {
-//   return mongoose
-//     .model('Album')
-//     .find({ songs: this._id })
-// }
-
-// schema.methods.getPlaylists = function() {
-//   return mongoose
-//     .model('Playlist')
-//     .find({ playlists: this._id })
-// }
 
 mongoose.model('Task', taskSchema)
 module.exports = taskSchema;
