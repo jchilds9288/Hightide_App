@@ -36,6 +36,7 @@ export default {
     },
 
     login:(userData) => {
+      console.log('posting...')
         return axios.post("/api/user/login", userData)
     }
 };

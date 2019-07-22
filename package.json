@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "",
-    "dev": "concurrently \"nodemon app.js\" \"cd client && yarn start\"",
+    "dev": "concurrently \"nodemon server/app.js\" \"cd client && yarn start\"",
     "seed": "node scripts/seedDB.js"
   },
   "dependencies": {
@@ -13,6 +13,7 @@
     "body-parser": "^1.18.3",
     "concurrently": "^4.1.0",
     "cookie-parser": "~1.4.3",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",

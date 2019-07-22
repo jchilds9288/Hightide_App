@@ -74,6 +74,7 @@ export default function Login() {
         API.login(loginForm)
         .then(result => {
           console.log('i have returned')
+          console.log(JSON.stringify(result));
         })
         .catch(err => {
           console.log(`uh oh: ${err}`)
@@ -81,40 +82,42 @@ export default function Login() {
     }
 
     return (
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Welcome To Tidepool
-          </Typography>
-          <form className={classes.form} onSubmit={handleSubmit} noValidate>
-            <LoginTextField value={loginForm.email} onChange={updateField} id="email" label="Email Address" name="email" autoComplete="email"/>
-            <LoginTextField value={loginForm.password} onChange={updateField} id="password" label="Password" name="password" type="password" />
+      <div className="col-sm-8 col-sm-offset-2">
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Welcome To Tidepool
+            </Typography>
+            <form className={classes.form} onSubmit={handleSubmit} noValidate>
+              <LoginTextField value={loginForm.email} onChange={updateField} id="email" label="Email Address" name="email" autoComplete="email"/>
+              <LoginTextField value={loginForm.password} onChange={updateField} id="password" label="Password" name="password" type="password" />
 
-            <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me"/>
-            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-              Sign In
-            </Button>
-            <br />
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/Signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-          </Grid>
-          <Box mt={5}>
-            <MadeWithLove />
-          </Box>
-        </form>
-        </div>
-      </Grid>
+              <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me"/>
+              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+                Sign In
+              </Button>
+              <br />
+              <Grid container>
+                <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href="/Signup" variant="body2">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
+            </Grid>
+            <Box mt={5}>
+              <MadeWithLove />
+            </Box>
+          </form>
+          </div>
+        </Grid>
+      </div>
     );
 }

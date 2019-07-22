@@ -1,173 +1,219 @@
-import React, {Component} from "react";
-import {Col, Row, Container} from "../../components/Grid";
-import {List, ListItem} from "../../components/List";
-import {FormBtn, Input} from "../../components/Form";
-import {DeleteBtn, Checkbox} from "../../components/Buttons";
-import Jumbotron from "../../components/Jumbotron";
-import NavHome from "../../components/NavHome";
-import API from "../../utils/API";
+import React from 'react';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import { withStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import Badge from '@material-ui/core/Badge';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Link from '@material-ui/core/Link';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import { mainListItems, secondaryListItems } from './listItems';
+import Chart from './Chart';
+import Deposits from './Deposits';
+import Orders from './Orders';
 
-class Profile extends Component {
-    
-    state = {
-        users:[],
-        tasks:[],
-        id:"",
-        title:"",
-        points: 0,
-        pointsEarned: 0,
-        taskAccomplished: false
-    };
+function MadeWithLove() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Built with love by the '}
+      <Link color="inherit" href="https://material-ui.com/">
+        Material-UI
+      </Link>
+      {' team.'}
+    </Typography>
+  );
+}
 
-    componentDidMount(){
-        this.loadTasks();
+const drawerWidth = 240;
+
+const styles = (theme) => ({
+    root: {
+      display: 'flex',
+    },
+    toolbar: {
+      paddingRight: 24,
+    },
+    toolbarIcon: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      padding: '0 8px',
+      ...theme.mixins.toolbar,
+    },
+    appBar: {
+      zIndex: theme.zIndex.drawer + 1,
+      transition: theme.transitions.create(['width', 'margin'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
+    appBarShift: {
+      marginLeft: drawerWidth,
+      width: `calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create(['width', 'margin'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    menuButton: {
+      marginRight: 36,
+    },
+    menuButtonHidden: {
+      display: 'none',
+    },
+    title: {
+      flexGrow: 1,
+    },
+    drawerPaper: {
+      position: 'relative',
+      whiteSpace: 'nowrap',
+      width: drawerWidth,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    drawerPaperClose: {
+      overflowX: 'hidden',
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      width: theme.spacing(7),
+      [theme.breakpoints.up('sm')]: {
+        width: theme.spacing(9),
+      },
+    },
+    appBarSpacer: theme.mixins.toolbar,
+    content: {
+      flexGrow: 1,
+      height: '100vh',
+      overflow: 'auto',
+    },
+    container: {
+      paddingTop: theme.spacing(4),
+      paddingBottom: theme.spacing(4),
+    },
+    paper: {
+      padding: theme.spacing(2),
+      display: 'flex',
+      overflow: 'auto',
+      flexDirection: 'column',
+    },
+    fixedHeight: {
+      height: 240,
+    },
+});
+
+
+class Dashboard extends React.Component {
+  constructor(props) {
+    console.log(`props: ${JSON.stringify(props)}`)
+    super(props)
+
+    this.state = {
+      open: true
     }
+  }
 
-    loadTasks= () => {
-        API.getTasks()
-        .then(res => {
-            console.log("wtf mate")
-            console.log(res)
-            console.log(res.data)
-            console.log(res.data.task._id)
-            this.setState({ tasks: res.data.task, id: "", points: "" })
-            }
-        )
-        .catch(err => console.log(err))
-    };
+  handleDrawerOpen() {
+    this.setState({open: true});
+  };
 
-    deleteTask = id => {
-        API.deleteTask(id)
-        .then(res => this.loadTasks())
-        .catch(err => console.log(err))
+  handleDrawerClose () {
+    this.setState({open: false});
+  };
 
-    };
+  render() {
+    const {open} = this.state;
+    const {classes} = this.props;
+    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    console.log(JSON.stringify(classes))
+    return (
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+          <Toolbar className={classes.toolbar}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={() => this.handleDrawerOpen()}
+              className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+              Dashboard
+            </Typography>
+            <IconButton color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={() => this.handleDrawerClose()}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>{mainListItems}</List>
+          <Divider />
+          <List>{secondaryListItems}</List>
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+              {/* Chart */}
+              <Grid item xs={12} md={8} lg={9}>
+                <Paper className={fixedHeightPaper}>
+                  <Chart />
+                </Paper>
+              </Grid>
+              {/* Recent Deposits */}
+              <Grid item xs={12} md={4} lg={3}>
+                <Paper className={fixedHeightPaper}>
+                  <Deposits />
+                </Paper>
+              </Grid>
+              {/* Recent Orders */}
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <Orders />
+                </Paper>
+              </Grid>
+            </Grid>
+          </Container>
+          <MadeWithLove />
+        </main>
+      </div>
+    );
+  }
+}
 
-    handleInputChange = event => {
-        const { name, value } = event.target;
-        this.setState({
-          [name]: value
-        });
-      };
+Dashboard.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
-
-    handleCheckboxChange = (id, points) => {
-        console.log(id)
-        console.log("valueChange")
-        API.updateTask(id)
-        .then(
-            this.setState({taskAccomplished:!this.state.taskAccomplished})
-            
-        )
-        .then(alert("now value is " + !this.state.taskAccomplished))
-        .then(this.setState({pointsEarned: this.state.pointsEarned + points}))
-        .then(res => this.loadTasks())
-        .catch(err => console.log(err))
-
-    }
-    
-
-    handleFormSubmit = event => {
-        event.preventDefault();
-        let user = JSON.parse(sessionStorage.getItem("user"))
-        if (this.state.title){
-            API.addTask({
-                title: this.state.title,
-                points: this.state.points,
-                taskAccomplished: false,
-                userId: user.id
-            })
-            .then(res => this.loadTasks())
-            .catch(err => console.log(err));
-        }
-
-    };
-    
-    render(){
-        return (
-            <Container fluid>
-                <Row>
-                    <Col size="md-12">
-                        <NavHome />
-                    </Col>
-                    <Col size="md-12">
-                        <Jumbotron>
-                            <h1>HIGHTIDE TASK LIST</h1>
-                        </Jumbotron>
-                    </Col>
-                    <Col size="md-6">
-                            <h1>ADD SOMETHING TO YOUR TASK LIST</h1>
-                            <Row>
-                                <Col size="sm-10">
-                                    <form>
-                                        <Input 
-                                            value={this.state.title}
-                                            onChange={this.handleInputChange}
-                                            name="title"
-                                            placeholder="Title (Required)"
-                                        />
-                                    </form>
-                                </Col>
-                                <Col size="sm-2">
-                                    <form>    
-                                         <select 
-                                            className="custom-select mr-sm-2" 
-                                            id="inlineFormCustomSelect" 
-                                            value={this.state.points} 
-                                            onChange={this.handleInputChange}
-                                            name="points">
-                                                <option >Point Value</option>
-                                                <option value="1">1</option>
-                                                <option value="3">3</option>
-                                                <option value="5">5</option>
-                                        </select>
-                                    </form>    
-                                </Col>
-                            </Row>
-                            <FormBtn
-                                disabled={!(this.state.title && this.state.points)}
-                                onClick={this.handleFormSubmit}>
-                                Add Task
-                            </FormBtn>
-                            <Row>
-                                <h1 className = "pointTitle">
-                                Points:
-                                </h1>
-                                <div className = "pointsDisplay">
-                                    {this.state.pointsEarned}
-                                </div>
-                            </Row>   
-                    </Col>
-                    <Col size="md-6">
-                        <h1>THE LIST</h1>
-                        {this.state.tasks.length ? (
-                            <List>
-                                {this.state.tasks.map(task => {
-                                    return (    
-                                        <ListItem key={task._id}>
-                                            <Row>
-                                            <Checkbox value={this.state.taskAccomplished}  onClick={() => (this.handleCheckboxChange(task._id, task.points))}/>
-                                             
-                                            <strong>
-                                                {task.points}
-                                            </strong>
-                                            <h3>
-                                                {task.id}
-                                            </h3>
-                                            </Row>
-                                            <DeleteBtn onClick={() => (this.deleteTask(task._id))}/>
-                                        </ListItem>  
-                                    );
-                                })}
-                            </List>
-                        ):(
-                            <h3>No Results to Display</h3>
-                        )}
-                    </Col>
-                </Row>
-            </Container>
-            );
-        }
-    }
-    
-    export default Profile;
+export default withStyles(styles)(Dashboard);
