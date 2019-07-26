@@ -18,10 +18,12 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
+import { mainListItems } from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
+import ProfilePhoto from './ProfilePhoto';
+import Badges from './Badges';
 
 function MadeWithLove() {
   return (
@@ -114,6 +116,13 @@ const styles = (theme) => ({
     fixedHeight: {
       height: 240,
     },
+    badgesContainer: {
+      height: 240,
+      padding: theme.spacing(1),
+      display: 'flex',
+      overflow: 'auto',
+      flexDirection: 'column',
+    },
 });
 
 
@@ -139,6 +148,7 @@ class Dashboard extends React.Component {
     const {open} = this.state;
     const {classes} = this.props;
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
     console.log(JSON.stringify(classes))
     return (
       <div className={classes.root}>
@@ -179,12 +189,26 @@ class Dashboard extends React.Component {
           <Divider />
           <List>{mainListItems}</List>
           <Divider />
-          <List>{secondaryListItems}</List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
+
+              {/* Profile*/}
+              <Grid item xs={12} md={4} lg={3}>
+                <Paper className={fixedHeightPaper}>
+                  <ProfilePhoto />
+                </Paper>
+              </Grid>
+
+              {/* Info */}
+              <Grid item xs={12} md={8} lg={9}>
+                <Paper className={classes.badgesContainer}>
+                  <Badges />
+                </Paper>
+              </Grid>
+
               {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>
                 <Paper className={fixedHeightPaper}>
