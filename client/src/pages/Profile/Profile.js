@@ -31,7 +31,7 @@ function MadeWithLove() {
       {'Built with love by the '}
       <Link color="inherit" href="https://material-ui.com/">
         Material-UI
-      </Link>
+      // </Link>
       {' team.'}
     </Typography>
   );
@@ -132,7 +132,7 @@ class Dashboard extends React.Component {
     super(props)
 
     this.state = {
-      open: true
+      open: false,
     }
   }
 

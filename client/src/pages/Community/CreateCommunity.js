@@ -59,13 +59,12 @@ export default function CreateCommunity() {
     'Allow \'You Won\'t\' Challenges'
   ];
   return (
+    <>
     <div className={classes.root}>
-    <Nav />
     <main className={classes.content}>
-      <div className={classes.appBarSpacer} />
+    <div className={classes.appBarSpacer} />
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
-
 
         <Grid item xs={12}>
             <TextField
@@ -98,7 +97,7 @@ export default function CreateCommunity() {
       </Grid>
       </Container>
       </main>
-
-    </div>
+      </div>
+      </>
   );
 }

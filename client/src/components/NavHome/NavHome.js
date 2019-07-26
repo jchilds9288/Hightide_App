@@ -32,7 +32,7 @@ import { mainListItems } from './listItems';
 
 const drawerWidth = 240;
 
-const styles = (theme) => ({ 
+const styles = (theme) => ({
   root: {
     display: 'flex',
   },
@@ -98,7 +98,7 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: true
+      open: false
     }
   }
 
