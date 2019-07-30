@@ -1,11 +1,11 @@
 import React from 'react';
-import Title from './Title';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import clsx from 'clsx';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Image from '../../images/ches.jpg'; // Import using relative path
+
+import Title from './Title';
 
 import fireBadge from '../../images/fireBadge.jpg'; // Import using relative path
 import eightyBadge from '../../images/80Badge.jpg'; // Import using relative path
@@ -50,43 +50,41 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Badges() {
-
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const fireBadge = clsx(classes.fireBadge, classes.badgeCard);
-  const eightyBadge = clsx(classes.eightyBadge, classes.badgeCard);
-  const clockBadge = clsx(classes.clockBadge, classes.badgeCard);
-  const runningBadge = clsx(classes.runningBadge, classes.badgeCard);
+  const fireBadgeClass = clsx(classes.fireBadge, classes.badgeCard);
+  const eightyBadgeClass = clsx(classes.eightyBadge, classes.badgeCard);
+  const clockBadgeClass = clsx(classes.clockBadge, classes.badgeCard);
+  const runningBadgeClass = clsx(classes.runningBadge, classes.badgeCard);
 
   return (
     <React.Fragment>
       <Title>Badges So Far</Title>
-        <Grid container spacing={3}>
-          <Grid item xs={4}>
-            <Paper className={fireBadge}/>
-          </Grid>
-
-          <Grid item xs={4}>
-            <Paper className={eightyBadge}/>
-          </Grid>
-
-          <Grid item xs={4}>
-            <Paper className={clockBadge}/>
-          </Grid>
-
-          <Grid item xs={4}>
-            <Paper className={runningBadge}/>
-          </Grid>
-
-          <Grid item xs={4}>
-            <Paper className={classes.badgeCard}/>
-          </Grid>
-
-          <Grid item xs={4}>
-            <Paper className={classes.badgeCard}/>
-          </Grid>
-
+      <Grid container spacing={3}>
+        <Grid item xs={4}>
+          <Paper className={fireBadgeClass} />
         </Grid>
+
+        <Grid item xs={4}>
+          <Paper className={eightyBadgeClass} />
+        </Grid>
+
+        <Grid item xs={4}>
+          <Paper className={clockBadgeClass} />
+        </Grid>
+
+        <Grid item xs={4}>
+          <Paper className={runningBadgeClass} />
+        </Grid>
+
+        <Grid item xs={4}>
+          <Paper className={classes.badgeCard} />
+        </Grid>
+
+        <Grid item xs={4}>
+          <Paper className={classes.badgeCard} />
+        </Grid>
+
+      </Grid>
     </React.Fragment>
   );
 }

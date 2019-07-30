@@ -1,7 +1,6 @@
 /* eslint-disable no-script-url */
 
 import React from 'react';
-import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Title from './Title';
@@ -21,7 +20,7 @@ export default function Deposits() {
         225
       </Typography>
       <Typography color="textSecondary" className={classes.depositContext}>
-        15 July, 2019 - ? 
+        15 July, 2019 - ?
       </Typography>
 
     </React.Fragment>

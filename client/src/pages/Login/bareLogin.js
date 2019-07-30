@@ -1,9 +1,8 @@
-import React, { useState} from 'react';
-import {Redirect} from "react-router-dom";
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
+import { withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {LoginTextField} from './loginTextField';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -16,7 +15,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import API from '../../utils/API';
 
-import TextField from '@material-ui/core/TextField';
+import { LoginTextField } from './loginTextField';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -46,78 +45,76 @@ function MadeWithLove() {
   );
 }
 
-export default function Login() {
+function Login(props) {
 
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const [loginForm, setValues] = useState({
-      email: '',
-      password: ''
+  const [loginForm, setValues] = useState({
+    email: '',
+    password: '',
+  });
+
+  const updateField = (e) => {
+    setValues({
+      ...loginForm,
+      [e.target.name]: e.target.value,
     });
+  };
 
-    const onFailure = (error) => {
-        alert(error);
-    }
-
-
-    const updateField = e => {
-      setValues({
-        ...loginForm,
-        [e.target.name]: e.target.value
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(`sending ${JSON.stringify(loginForm)}`)
+  //  const { history } = this.props;
+    API.login(loginForm)
+      .then((result) => {
+        console.log('i have returned')
+        console.log(JSON.stringify(result));
+        props.history.push('/profile');
+      })
+      .catch((err) => {
+        console.log(`uh oh: ${err}`)
       });
-    };
+  };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.target);
-        console.log(`sending ${JSON.stringify(loginForm)}`)
-        API.login(loginForm)
-        .then(result => {
-          console.log('i have returned')
-          console.log(JSON.stringify(result));
-        })
-        .catch(err => {
-          console.log(`uh oh: ${err}`)
-        })
-    }
+  return (
+    <div className="col-sm-8 col-sm-offset-2">
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Welcome To Tidepool
+          </Typography>
+          <form className={classes.form} onSubmit={handleSubmit} noValidate>
+            <LoginTextField value={loginForm.email} onChange={updateField} id="email" label="Email Address" name="email" autoComplete="email" />
+            <LoginTextField value={loginForm.password} onChange={updateField} id="password" label="Password" name="password" type="password" />
 
-    return (
-      <div className="col-sm-8 col-sm-offset-2">
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-          <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Welcome To Tidepool
-            </Typography>
-            <form className={classes.form} onSubmit={handleSubmit} noValidate>
-              <LoginTextField value={loginForm.email} onChange={updateField} id="email" label="Email Address" name="email" autoComplete="email"/>
-              <LoginTextField value={loginForm.password} onChange={updateField} id="password" label="Password" name="password" type="password" />
-
-              <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me"/>
-              <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-                Sign In
-              </Button>
-              <br />
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="/Signup" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
+            <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+            <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+              Sign In
+            </Button>
+            <br />
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="/Signup" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
             </Grid>
             <Box mt={5}>
               <MadeWithLove />
             </Box>
           </form>
-          </div>
-        </Grid>
-      </div>
-    );
+        </div>
+      </Grid>
+    </div>
+  );
 }
+
+export default withRouter(Login);

@@ -14,31 +14,33 @@ import GroupIcon from '@material-ui/icons/Group';
 import SchoolIcon from '@material-ui/icons/School';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-export const mainListItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <GroupIcon />
-      </ListItemIcon>
-      <ListItemText primary="Task Groups" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Stats" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <SchoolIcon />
-      </ListItemIcon>
-      <ListItemText primary="Education" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <SettingsIcon />
-      </ListItemIcon>
-      <ListItemText primary="Account" />
-    </ListItem>
-  </div>
-);
+export default function mainListItems() {
+  return (
+    <div>
+      <ListItem button>
+        <ListItemIcon>
+          <GroupIcon />
+        </ListItemIcon>
+        <ListItemText primary="Task Groups" />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Stats" />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <SchoolIcon />
+        </ListItemIcon>
+        <ListItemText primary="Education" />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <SettingsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Account" />
+      </ListItem>
+    </div>
+  );
+}

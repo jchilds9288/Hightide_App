@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "",
     "dev": "concurrently \"nodemon server/app.js\" \"cd client && yarn start\"",
-    "seed": "node scripts/seedDB.js"
+    "seed": "node scripts/seedDB.js",
+    "lint": "eslint"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -32,6 +32,11 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
-    "@types/node": "^12.0.12"
+    "@types/node": "^12.0.12",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3"
   }
 }

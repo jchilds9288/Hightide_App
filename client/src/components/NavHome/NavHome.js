@@ -1,18 +1,11 @@
-import React from "react";
+import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import {SelectPoints} from '../../components/Form'
-import {CheckBoxGroup} from '../../components/Form'
 import MenuIcon from '@material-ui/icons/Menu';
 
 
@@ -25,14 +18,13 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems } from './listItems';
+import MainListItems from './listItems';
 
 const drawerWidth = 240;
 
-const styles = (theme) => ({
+const styles = theme => ({
   root: {
     display: 'flex',
   },
@@ -93,26 +85,30 @@ const styles = (theme) => ({
 });
 
 
-
 class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
-    }
+      open: false,
+    };
   }
 
   handleDrawerOpen() {
-    this.setState({open: true});
-  };
+    this.setState({ open: true });
+  }
 
-  handleDrawerClose () {
-    this.setState({open: false});
-  };
+  handleDrawerClose() {
+    this.setState({ open: false });
+  }
 
-  render () {
-    const {open} = this.state;
-    const {classes} = this.props;
+  handleClick(page) {
+    const { history } = this.props;
+    history.push(`/${page}`);
+  }
+
+  render() {
+    const { open } = this.state;
+    const { classes } = this.props;
 
     return (
       <>
@@ -129,7 +125,7 @@ class Nav extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-              Dashboard
+              TidePool
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
@@ -151,16 +147,19 @@ class Nav extends React.Component {
             </IconButton>
           </div>
           <Divider />
-          <List>{mainListItems}</List>
+          <List>
+            <MainListItems handleClick={this.handleClick.bind(this)} />
+          </List>
           <Divider />
         </Drawer>
       </>
-      )
-    }
-  };
+    );
+  }
+}
 
 Nav.propTypes = {
   classes: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Nav);
+export default withRouter(withStyles(styles)(Nav));

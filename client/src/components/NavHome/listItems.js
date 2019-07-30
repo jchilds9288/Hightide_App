@@ -1,40 +1,35 @@
+/* eslint-disable react/prop-types */
+
 import React from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-
 import GroupIcon from '@material-ui/icons/Group';
 import SchoolIcon from '@material-ui/icons/School';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-export const mainListItems = (
+const mainListItems = props => (
   <div>
-    <ListItem button>
+    <ListItem button onClick={() => props.handleClick('teams')}>
       <ListItemIcon>
         <GroupIcon />
       </ListItemIcon>
       <ListItemText primary="Task Groups" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick={() => props.handleClick('profile')}>
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
       <ListItemText primary="Stats" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick={() => props.handleClick()}>
       <ListItemIcon>
         <SchoolIcon />
       </ListItemIcon>
       <ListItemText primary="Education" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick={() => props.handleClick()}>
       <ListItemIcon>
         <SettingsIcon />
       </ListItemIcon>
@@ -42,3 +37,5 @@ export const mainListItems = (
     </ListItem>
   </div>
 );
+
+export default mainListItems;

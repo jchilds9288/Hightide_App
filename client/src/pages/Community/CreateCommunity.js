@@ -1,29 +1,29 @@
-import React from 'react';
+/* eslint-disable react/forbid-prop-types */
+import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import SendIcon from '@material-ui/icons/Send';
+
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 import TextField from '@material-ui/core/TextField';
-import clsx from 'clsx';
-import Select from '@material-ui/core/Select';
-import {SelectPoints} from '../../components/Form'
-import {CheckBoxGroup} from '../../components/Form'
-import Nav from '../../components/NavHome'
+import { SelectPoints, CheckBoxGroup } from '../../components/Form';
+
+import { LoginTextField } from '../Login/loginTextField';
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
   },
   appBarSpacer: theme.mixins.toolbar,
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
@@ -41,63 +41,168 @@ const useStyles = makeStyles(theme => ({
   dense: {
     marginTop: theme.spacing(2),
   },
-  menu: {
-    width: 200,
-  },
   content: {
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto',
   },
+  margin: {
+    margin: '21px 0px',
+  },
+  cancel: {
+    marginRight: theme.spacing(1),
+  },
+  iconSmall: {
+    fontSize: 20,
+  },
+  communityTitle: {
+    color: '#f50057',
+  },
+  cancelBtn: {
+    backgroundColor: 'red',
+    margin: theme.spacing(1),
+  },
+  sendBtn: {
+    margin: theme.spacing(1),
+  },
 }));
 
-export default function CreateCommunity() {
+export default function CreateCommunity({ handleClose }) {
   const classes = useStyles();
   const checkBoxLabels = [
     'Allow Hidden Tasks',
     'Make Group Private',
-    'Allow \'You Won\'t\' Challenges'
+    'Allow \'You Won\'t\' Challenges',
   ];
+
+  const [teamMembers, updateTeam] = useState([]);
+  const [enteredUser, updateEnteredUser] = useState('');
+
+  const [dailyPointVal, updateDailyPointVal] = useState(20);
+  const [totalPointVal, updateTotalPointVal] = useState(500);
+  const [teamName, updateTeamName] = useState('');
+
+  const addEntry = useCallback(() => {
+    updateTeam([...teamMembers, enteredUser]);
+    updateEnteredUser('');
+  });
+
+  const updateDailyPoints = ((points) => {
+    console.log(`updating to ${points}`)
+    updateDailyPointVal(points);
+  });
+
+  const updateTotalPoints = ((points) => {
+    console.log(`updating to ${points}`)
+    updateTotalPointVal(points);
+  });
+
+  const handleUpdateTeamName = (e) => {
+    updateTeamName(e.target.value);
+  };
+
+  const updateUser = (e) => {
+    updateEnteredUser(e.target.value);
+  };
+
+  const addTeam = () => {
+    const teamObj = {
+      teamName,
+      dailyPointVal,
+      totalPointVal,
+      teamMembers,
+    };
+    console.log(JSON.stringify(teamObj));
+  };
+
   return (
     <>
-    <div className={classes.root}>
-    <main className={classes.content}>
-    <div className={classes.appBarSpacer} />
-      <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3}>
+      <div className={classes.root}>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            <Paper className={classes.paper}>
+              <Typography className={classes.communityTitle} variant="h3" gutterBottom>
+              Create a Community
+              </Typography>
+              <Grid container spacing={3}>
 
-        <Grid item xs={12}>
-            <TextField
-              id="outlined-dense"
-              label="Group Name"
-              className={clsx(classes.textField, classes.dense)}
-              margin="dense"
-              variant="outlined"
-            />
-        </Grid>
-        <Grid item xs={6}>
-          <Paper className={classes.paper}>
-          <SelectPoints title="Daily Point Value" />
-          </Paper>
-        </Grid>
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <TextField
+                      id="outlined-dense"
+                      label="Team Name"
+                      value={teamName}
+                      className={clsx(classes.textField, classes.dense)}
+                      margin="dense"
+                      variant="outlined"
+                      onChange={handleUpdateTeamName}
+                    />
+                  </Paper>
+                </Grid>
 
-        <Grid item xs={6}>
-          <Paper className={classes.paper}>
-            <SelectPoints title="Total Point Value" />
-          </Paper>
-        </Grid>
+                <Grid item xs={6}>
+                  <Paper className={classes.paper}>
+                    <SelectPoints title="Daily Point Value" handleChange={updateDailyPoints} />
+                  </Paper>
+                </Grid>
 
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <CheckBoxGroup labels={checkBoxLabels}/>
-          </Paper>
-        </Grid>
+                <Grid item xs={6}>
+                  <Paper className={classes.paper}>
+                    <SelectPoints title="Total Point Value" handleChange={updateTotalPoints}/>
+                  </Paper>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Paper className={classes.paper}>
+                    <CheckBoxGroup labels={checkBoxLabels} />
+                  </Paper>
+                </Grid>
+
+                <Grid item xs={11}>
+                  <LoginTextField value={enteredUser} onChange={updateUser} id="email" label="Team Member" name="email" autoComplete="username" />
+                </Grid>
+
+                <Grid item xs={1}>
+                  <Fab onClick={() => addEntry('Friend')} size="small" color="secondary" aria-label="add" className={classes.margin}>
+                    <AddIcon />
+                  </Fab>
+                </Grid>
+
+                { teamMembers.map(member => ((
+                  <Grid item xs={3}>
+                    <Paper className={classes.paper}>
+                      {member}
+                    </Paper>
+                  </Grid>
+                )))
+              }
+
+                <Grid item xs={12}>
+                  <Button onClick={handleClose} variant="contained" color="primary" className={classes.cancelBtn}>
+                    <CancelIcon className={clsx(classes.cancel, classes.iconSmall)} />
+                          Cancel
+                  </Button>
+
+                  <Button onClick={() => addTeam()} variant="contained" color="primary" className={classes.sendBtn}>
+                    <SendIcon className={clsx(classes.leftIcon, classes.iconSmall)} />
+                          Create
+                  </Button>
+                </Grid>
+
+              </Grid>
+            </Paper>
 
 
-      </Grid>
-      </Container>
-      </main>
+
+          </Container>
+        </main>
       </div>
-      </>
+    </>
   );
 }
+
+CreateCommunity.propTypes = {
+  classes: PropTypes.object.isRequired,
+  handleClose: PropTypes.func.isRequired,
+};
