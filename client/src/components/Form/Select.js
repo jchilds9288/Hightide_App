@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -12,42 +13,38 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
+    marginTop: '16px',
+    marginBottom: '8px',
   },
   formControl: {
-    margin: theme.spacing(1),
     flex: 1,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
   },
 }));
 
-export default function SimpleSelect({ handleChange, title }) {
+export default function SimpleSelect({
+  handleChange,
+  title,
+  options,
+  value,
+}) {
   const classes = useStyles();
-  const [values, setValues] = React.useState({
-    age: '',
-    name: 'hai',
-  });
 
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
+
   React.useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
 
   function handleLocalChange(event) {
-    setValues(oldValues => ({
-      ...oldValues,
-      [event.target.name]: event.target.value,
-    }));
     handleChange(event.target.value);
   }
 
   function renderPoints() {
     const arr = [];
-    for (let i = 50; i < 400; i += 50) {
-      arr.push(<MenuItem key={i} value={i}>{i}</MenuItem>);
-    }
+    options.forEach((option) => {
+      arr.push(<MenuItem key={option} value={option}>{option}</MenuItem>);
+    });
     return arr;
   }
 
@@ -58,7 +55,7 @@ export default function SimpleSelect({ handleChange, title }) {
           {title}
         </InputLabel>
         <Select
-          value={values.age}
+          value={value}
           onChange={handleLocalChange}
           input={<OutlinedInput labelWidth={labelWidth} name="age" id="outlined-age-simple" />}
         >
@@ -78,4 +75,6 @@ export default function SimpleSelect({ handleChange, title }) {
 SimpleSelect.propTypes = {
   handleChange: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+  options: PropTypes.array.isRequired,
+  value: PropTypes.number.isRequired,
 };

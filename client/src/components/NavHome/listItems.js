@@ -29,7 +29,7 @@ const mainListItems = props => (
       </ListItemIcon>
       <ListItemText primary="Education" />
     </ListItem>
-    <ListItem button onClick={() => props.handleClick()}>
+    <ListItem button onClick={() => props.handleClick('admin')}>
       <ListItemIcon>
         <SettingsIcon />
       </ListItemIcon>

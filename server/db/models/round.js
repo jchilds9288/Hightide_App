@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const User = require('./user');
-const User = require('./user');
 
-const roundSchema = new Schema ({
-    team: {type: Team, required: true},
-    created: {type: Date, default: Date.now},
-    goal: {type: Number, require: true}
-});
+const { Schema } = mongoose;
 
-mongoose.model('Round', roundSchema)
-module.exports = round;
+const roundSchema = new Schema({
+  team: { type: Schema.Types.ObjectId, ref: 'Team', required: true },
+  created: { type: Date, default: Date.now },
+  dailyGoal: { type: Number, require: true },
+  roundGoal: { type: Number, require: true },
+}, { autoIndex: false });
+
+mongoose.model('Round', roundSchema);
+
+module.exports = roundSchema;

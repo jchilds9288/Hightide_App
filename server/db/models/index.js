@@ -1,6 +1,5 @@
-module.exports ={
-    Task: require("./task"),
-    Pool: require("./pool"),
-    Team: require("./team"),
-    User: require("./user"),
-};
+exports.Task = require('./task');
+exports.Pool = require('./pool');
+exports.User = require('./user');
+exports.Team = require('./team');
+exports.Round = require('./round');

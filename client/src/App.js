@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import { BareLogin } from './pages/Login';
 import { Teams } from './pages/Community';
+import Admin from './pages/Account';
 import Nav from './components/NavHome'
 
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/login" component={BareLogin} />
         <Route path="/profile" component={Profile} />
         <Route path="/teams" component={Teams} />
+        <Route path="/admin" component={Admin} />
       </div>
     </Router>
   );

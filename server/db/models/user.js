@@ -34,6 +34,8 @@ UserSchema.pre('save', (next) => {
   console.log(JSON.stringify(this))
 
   const user = this;
+  console.log('why am i over here')
+
   // only hash the password if it has been modified (or is new)
   if (!user.isModified('password')) return next();
 

@@ -1,6 +1,8 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState, useCallback } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
+import uuid from 'uuid';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Paper from '@material-ui/core/Paper';
@@ -25,13 +27,14 @@ const useStyles = makeStyles(theme => ({
   },
   appBarSpacer: theme.mixins.toolbar,
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(3),
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
+    width: '80%',
   },
   textField: {
     marginLeft: theme.spacing(1),
@@ -67,7 +70,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function CreateCommunity({ handleClose }) {
+export default function CreateCommunity({ handleClose, handleSave }) {
   const classes = useStyles();
   const checkBoxLabels = [
     'Allow Hidden Tasks',
@@ -80,12 +83,7 @@ export default function CreateCommunity({ handleClose }) {
 
   const [dailyPointVal, updateDailyPointVal] = useState(20);
   const [totalPointVal, updateTotalPointVal] = useState(500);
-  const [teamName, updateTeamName] = useState('');
-
-  const addEntry = useCallback(() => {
-    updateTeam([...teamMembers, enteredUser]);
-    updateEnteredUser('');
-  });
+  const [teamName, updateTeamName] = useState(uuid());
 
   const updateDailyPoints = ((points) => {
     console.log(`updating to ${points}`)
@@ -105,14 +103,40 @@ export default function CreateCommunity({ handleClose }) {
     updateEnteredUser(e.target.value);
   };
 
-  const addTeam = () => {
+  const checkUser = async (user) => {
+    console.log(`checking for ${user}`)
+    const { data: userSearch } = await axios.get('/api/user', {
+      params: {
+        email: user,
+      }
+    });
+    return userSearch;
+  }
+
+  const addEntry = useCallback(async () => {
+    const user = await checkUser(enteredUser);
+    console.log(`isUser: ${JSON.stringify(user)}`);
+    if (!user.length) {
+      alert('sorry that user doesnt exist!')
+      return;
+    }
+    const [newTeamMember] = user;
+    console.log(`newTeamMember: ${JSON.stringify(newTeamMember)}`)
+    updateTeam([...teamMembers, newTeamMember]);
+    updateEnteredUser('');
+  });
+
+  const addTeam = async () => {
     const teamObj = {
       teamName,
-      dailyPointVal,
-      totalPointVal,
+      dailyGoal: dailyPointVal,
+      roundGoal: totalPointVal,
       teamMembers,
     };
     console.log(JSON.stringify(teamObj));
+    const newTeam = await axios.post('/api/team', teamObj);
+    console.log(JSON.stringify(newTeam))
+    handleSave(newTeam);
   };
 
   return (
@@ -143,13 +167,13 @@ export default function CreateCommunity({ handleClose }) {
 
                 <Grid item xs={6}>
                   <Paper className={classes.paper}>
-                    <SelectPoints title="Daily Point Value" handleChange={updateDailyPoints} />
+                    <SelectPoints options={[15, 20, 25]} title="Daily Point Value" value={dailyPointVal} handleChange={updateDailyPoints} />
                   </Paper>
                 </Grid>
 
                 <Grid item xs={6}>
                   <Paper className={classes.paper}>
-                    <SelectPoints title="Total Point Value" handleChange={updateTotalPoints}/>
+                    <SelectPoints options={[200, 250, 300, 350, 400]} title="Total Point Value" value={totalPointVal} handleChange={updateTotalPoints} />
                   </Paper>
                 </Grid>
 
@@ -172,7 +196,7 @@ export default function CreateCommunity({ handleClose }) {
                 { teamMembers.map(member => ((
                   <Grid item xs={3}>
                     <Paper className={classes.paper}>
-                      {member}
+                      {member.email}
                     </Paper>
                   </Grid>
                 )))

@@ -1,16 +1,22 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const Pool = require('./pool');
-const User = require('./user');
 
-const taskSchema = new Schema ({
-    title: {type: String, required: true},
-    points: {type: Number, required: true},
-    proofRequired: {type: Boolean, default: false},
-    pool: {type: Pool, required: false},
-    user: {type: User, required: true}
-}, {autoIndex: false});
+const { Schema } = mongoose;
+
+const taskSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  title: { type: String, required: true },
+  points: { type: Number, required: true },
+  proofRequired: { type: Boolean, required: false },
+  created: {
+    type: Date,
+    default: Date.now,
+  },
+}, { autoIndex: false });
 
 
-mongoose.model('Task', taskSchema)
+mongoose.model('Task', taskSchema);
 module.exports = taskSchema;

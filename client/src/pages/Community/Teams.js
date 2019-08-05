@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import axios from 'axios';
+
 import 'typeface-roboto';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
@@ -12,6 +14,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import TeamCard from '../../components/Cards/TeamCard';
 import CreateCommunity from './CreateCommunity';
+
+import services from '../../services';
 
 const styles = theme => ({
   root: {
@@ -85,7 +89,15 @@ class Teams extends React.Component {
     super(props);
     this.state = {
       open: false,
+      teams: [],
     };
+  }
+
+  async componentDidMount() {
+    const { data: teams } = await axios.get('/api/team');
+    console.log(JSON.stringify(teams))
+    console.log(`already done...`)
+    this.setState({ teams })
   }
 
   handleOpen() {
@@ -96,9 +108,14 @@ class Teams extends React.Component {
     this.setState({ open: false });
   }
 
+  handleSave(e) {
+    console.log(`receive: ${JSON.stringify(e)}`)
+    this.setState({ open: false });
+  }
+
   render() {
     const { classes } = this.props;
-    const { open } = this.state;
+    const { open, teams } = this.state;
     const score = {
       dailyPointsWon: 14,
       dailyPointsTotal: 25,
@@ -106,6 +123,11 @@ class Teams extends React.Component {
 
     const closeModal = () => this.handleClose();
     const openModal = () => this.handleOpen();
+    const handleSave = (e) => {
+      console.log('am i here')
+      console.log(JSON.stringify(e))
+      this.handleSave();
+    }
 
     return (
       <main className={classes.content}>
@@ -116,6 +138,13 @@ class Teams extends React.Component {
           </Typography>
           <TeamCard score={score} photo="rebels" teamName="Rebel Brigade" />
           <TeamCard score={score} photo="empire" teamName="Empire Squad" />
+
+          {
+            teams.map((team)=> {
+              return <TeamCard score={score} photo="empire" teamName={team.name} />
+            })
+          }
+
           <Grid item xs={12} className={classes.buttonContainer}>
             <Button
               variant="contained"
@@ -131,7 +160,7 @@ class Teams extends React.Component {
               aria-describedby="simple-modal-description"
               open={open}
             >
-              <CreateCommunity test="asdf" handleClose={closeModal} />
+              <CreateCommunity test="asdf" handleSave={handleSave} handleClose={closeModal} />
             </Modal>
           </Grid>
         </Container>

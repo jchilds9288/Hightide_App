@@ -1,21 +1,29 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const User = require('./user');
 
-const teamSchema = new Schema ({
-    name: {
-      type: String,
-      required: true
-    },
-    members: {
-      type: [User],
-      required: true,
-      default: []
-    },
-    created: {
-      type: Date,
-      default: Date.now
-    }
-});
+const { Schema } = mongoose;
 
-module.exports = mongoose.model('Team', teamSchema)
+const teamSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  members: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    default: [],
+  }],
+  pendingMembers: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    default: [],
+  }],
+  created: {
+    type: Date,
+    default: Date.now,
+  },
+}, { autoIndex: false });
+
+mongoose.model('Team', teamSchema);
+module.exports = teamSchema;

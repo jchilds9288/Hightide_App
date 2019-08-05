@@ -7,6 +7,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
@@ -63,7 +65,11 @@ class Dashboard extends React.Component {
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
-
+              <Grid item xs={4}>
+                <Button variant="contained" color="primary">
+                Add Task
+                </Button>
+              </Grid>
               { /* Profile */ }
               <Grid item xs={12} md={4} lg={3}>
                 <Paper className={fixedHeightPaper}>
@@ -96,7 +102,10 @@ class Dashboard extends React.Component {
                   <Orders />
                 </Paper>
               </Grid>
+
+
             </Grid>
+
           </Container>
         </main>
       </div>
