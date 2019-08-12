@@ -8,6 +8,7 @@ import Profile from './pages/Profile';
 import { BareLogin } from './pages/Login';
 import { Teams } from './pages/Community';
 import Admin from './pages/Account';
+import Tasks from './pages/Tasks';
 import Nav from './components/NavHome'
 
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="/profile" component={Profile} />
         <Route path="/teams" component={Teams} />
         <Route path="/admin" component={Admin} />
+        <Route path="/tasks" component={Tasks} />
       </div>
     </Router>
   );

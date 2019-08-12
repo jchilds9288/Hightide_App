@@ -8,6 +8,7 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import GroupIcon from '@material-ui/icons/Group';
 import SchoolIcon from '@material-ui/icons/School';
 import SettingsIcon from '@material-ui/icons/Settings';
+import KeyIcon from '@material-ui/icons/VpnKey';
 
 const mainListItems = props => (
   <div>
@@ -34,6 +35,12 @@ const mainListItems = props => (
         <SettingsIcon />
       </ListItemIcon>
       <ListItemText primary="Account" />
+    </ListItem>
+    <ListItem button onClick={() => props.handleClick('teacher')}>
+      <ListItemIcon>
+        <KeyIcon />
+      </ListItemIcon>
+      <ListItemText primary="Teacher" />
     </ListItem>
   </div>
 );
