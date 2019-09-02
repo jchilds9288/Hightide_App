@@ -15,6 +15,10 @@ const taskSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  pool: {
+    type: String,
+    default: 'Happy',
+  }
 }, { autoIndex: false });
 
 

@@ -58,7 +58,7 @@ const seed = async () => {
     console.log(JSON.stringify(teamData));
 
     taskData.forEach((task, i) => {
-      taskData[i].user = users.ops[0]._id;
+      taskData[i].user = users.ops[Math.floor(Math.random() * 4)]._id;
     });
 
     const tasks = await Task.collection.insertMany(taskData);

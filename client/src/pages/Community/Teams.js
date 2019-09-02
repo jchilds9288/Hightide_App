@@ -15,8 +15,6 @@ import Container from '@material-ui/core/Container';
 import TeamCard from '../../components/Cards/TeamCard';
 import CreateCommunity from './CreateCommunity';
 
-import services from '../../services';
-
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -108,9 +106,10 @@ class Teams extends React.Component {
     this.setState({ open: false });
   }
 
-  handleSave(e) {
+  async handleSave(e) {
     console.log(`receive: ${JSON.stringify(e)}`)
-    this.setState({ open: false });
+    const { data: teams } = await axios.get('/api/team');
+    this.setState({ open: false, teams });
   }
 
   render() {

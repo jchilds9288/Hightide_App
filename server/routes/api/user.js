@@ -55,6 +55,7 @@ router.post('/login', (req, res, next) =>  {
     })
 })
 
+
 router.get('/', (req, res, next) =>  {
   console.log(`searching for ${JSON.stringify(req.body)}`);
   console.log(`searching for ${JSON.stringify(req.query)}`);
@@ -63,7 +64,7 @@ router.get('/', (req, res, next) =>  {
   return mongoose.model('User', User)
     .find(req.query)
     .then((user) => {
-      console.log(`i found: ${JSON.stringify(user)}`)
+      console.log(`i found these users: ${JSON.stringify(user)}`)
       return res.status(200).json(user)
     })
     .then(null, next)
@@ -78,7 +79,7 @@ router.get('/:id/tasks', (req, res, next) =>  {
   return Task
     .find({ user: new ObjectId(req.params.id) })
     .then((tasks) => {
-      console.log(`i found: ${JSON.stringify(tasks)}`)
+      console.log(`i found these tasks: ${JSON.stringify(tasks)}`)
       return res.status(200).json(tasks);
     })
     .then(null, next)
@@ -95,6 +96,7 @@ router.post('/:id/tasks', (req, res, next) =>  {
       user: new ObjectId(req.params.id),
       title: req.body.title,
       points: req.body.points,
+      pool: req.body.pool,
     })
     .then((task) => {
       console.log(`i made: ${JSON.stringify(task)}`)
@@ -102,6 +104,24 @@ router.post('/:id/tasks', (req, res, next) =>  {
     })
     .then(null, next)
     .catch((err) => {
+      console.log('THERE WAS A PROB')
+      return console.log(err)
+    });
+})
+
+router.delete('/:id/tasks/:task', (req, res, next) =>  {
+  console.log(`deleting for ${JSON.stringify(req.params.task)}`);
+  return Task
+    .deleteOne({
+      _id: new ObjectId(req.params.task)
+    })
+    .then((task) => {
+      console.log(`i deleted: ${JSON.stringify(task)}`)
+      return res.status(200).json(task);
+    })
+    .then(null, next)
+    .catch((err) => {
+      console.log('THERE WAS A PROB')
       return console.log(err)
     });
 })

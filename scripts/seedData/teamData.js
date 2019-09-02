@@ -1,3 +1,3 @@
 module.exports = [{
-  name: 'Rebel Squadrom',
+  name: 'Rebel Squadron',
 }];

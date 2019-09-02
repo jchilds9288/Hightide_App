@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import { BareLogin } from './pages/Login';
 import { Teams } from './pages/Community';
-import Admin from './pages/Account';
+import Admin, { Teacher } from './pages/Account';
 import Tasks from './pages/Tasks';
 import Nav from './components/NavHome'
 
@@ -30,6 +30,8 @@ function App() {
         <Route path="/teams" component={Teams} />
         <Route path="/admin" component={Admin} />
         <Route path="/tasks" component={Tasks} />
+        <Route path="/teacher" component={Teacher} />
+
       </div>
     </Router>
   );

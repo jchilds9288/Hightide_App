@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import axios from 'axios';
 import moment from 'moment';
-import _ from 'underscore';
 
 import Typography from '@material-ui/core/Typography';
 import 'typeface-roboto';
@@ -13,20 +12,7 @@ import 'typeface-roboto';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import { SelectPoints, CheckBoxGroup } from '../../components/Form';
-
-import Title from '../Profile/Title';
-import { LoginTextField } from '../Login/loginTextField';
-
 
 const styles = theme => ({
   root: {
@@ -106,19 +92,25 @@ class Tasks extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    const { data: userTasks } = await axios.get(`/api/user/${'5d4497175b7a5c2b0e396349'}/tasks`);
-  //  console.log(`tasks!: ${JSON.stringify(userTasks)}`)
-    const formattedTasks = userTasks.map((task, i) => {
-      return {
-        id: i,
-        date: task.created,
-        task: task.title,
-        pool: '',
-        points: task.points,
-      };
-    });
-    this.setState({ tasks: formattedTasks });
+componentDidMount() {
+    console.log('asdfasdfasdf')
+    axios.get(`/api/user/${this.props.id}/tasks`)
+      .then((userTasks) => {
+        console.log('aaa')
+        console.log(`tasks!: ${JSON.stringify(userTasks)}`)
+        debugger;
+        const formattedTasks = userTasks.map((task, i) => {
+          return {
+            id: i,
+            date: task.created,
+            task: task.title,
+            pool: '',
+            points: task.points,
+          };
+        });
+        this.setState({ tasks: formattedTasks });
+      });
+
   }
 
   handleSave(task) {
@@ -137,7 +129,11 @@ class Tasks extends React.Component {
   }
 
   async sendTask() {
-    const { enteredTask, enteredPool, enteredPoints} = this.state;
+    const {
+      enteredTask,
+      enteredPool,
+      enteredPoints
+    } = this.state;
     const userID = '5d4497175b7a5c2b0e396349';
     const obj = {
       user: userID,

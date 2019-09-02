@@ -2,14 +2,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import axios from 'axios';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -17,11 +14,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import { SelectPoints, CheckBoxGroup } from '../../components/Form';
+import ThumbDown from '@material-ui/icons/ThumbDown';
+
+import { SelectPoints } from '../../components/Form';
 
 import Title from '../Profile/Title';
 import { LoginTextField } from '../Login/loginTextField';
 
+import { AddTask } from '../../components/Form';
 
 // Generate Order Data
 function createData(id, date, task, givenTo, pool, points) {
@@ -88,23 +88,38 @@ class Admin extends React.Component {
   //  console.log(`tasks!: ${JSON.stringify(userTasks)}`)
     const formattedTasks = userTasks.map((task, i) => {
       return {
-        id: i,
+        id: task._id,
         date: task.created,
         task: task.title,
-        pool: '',
+        pool: task.pool,
         points: task.points,
       };
     });
     this.setState({ tasks: formattedTasks });
   }
 
-  handleSave(task) {
-    this.setState((state) => {
-      const newTask = {
-        id: state.length,
+  async fetchTasks() {
+    const { data: userTasks } = await axios.get(`/api/user/${'5d4497175b7a5c2b0e396349'}/tasks`);
+  //  console.log(`tasks!: ${JSON.stringify(userTasks)}`)
+    const formattedTasks = userTasks.map((task, i) => {
+      return {
+        id: task._id,
         date: task.created,
         task: task.title,
-        pool: 'this is not done yet',
+        pool: task.pool,
+        points: task.points,
+      };
+    });
+    this.setState({ tasks: formattedTasks });
+  }
+
+  updateTasks(task) {
+    this.setState((state) => {
+      const newTask = {
+        id: task._id,
+        date: task.created,
+        task: task.title,
+        pool: task.pool,
         points: task.points,
       };
       const userTasks = state.tasks.concat(newTask);
@@ -113,63 +128,28 @@ class Admin extends React.Component {
     });
   }
 
-  async sendTask() {
-    const { enteredTask, enteredPool, enteredPoints} = this.state;
+  async sendTask(task) {
     const userID = '5d4497175b7a5c2b0e396349';
-    const obj = {
-      user: userID,
-      title: enteredTask,
-      points: enteredPoints,
-    };
 
-    const { data: newTask } = await axios.post(`/api/user/${'5d4497175b7a5c2b0e396349'}/tasks`, obj);
+    const { data: newTask } = await axios.post(`/api/user/${userID}/tasks`, task);
     console.log(JSON.stringify(newTask))
-    this.handleSave(newTask);
+    this.updateTasks(newTask);
 
   }
 
-  updateUser(e) {
-    console.log('hhey')
-    this.setState({ enteredTask: e.target.value });
-  }
+  async deleteTask(taskID) {
+    const userID = '5d4497175b7a5c2b0e396349';
 
-  updatePoints(e) {
-    this.setState({ enteredPoints: e });
-  }
+    const { data: newTask } = await axios.delete(`/api/user/${userID}/tasks/${taskID}`);
+    console.log(JSON.stringify(newTask))
+    await this.fetchTasks();
 
-  updatePool(e) {
-    this.setState({ enteredPool: e });
-  }
-
-  addTask() {
-    const {
-      tasks,
-      enteredTask,
-      enteredPool,
-      enteredPoints,
-    } = this.state;
-
-    this.setState((state) => {
-      const newTask = {
-        id: tasks.length,
-        date: moment().format(),
-        task: enteredTask,
-        pool: enteredPool,
-        points: enteredPoints,
-      };
-      const userTasks = state.tasks.concat(newTask);
-
-      return { tasks: userTasks };
-    });
   }
 
   render() {
     const { classes } = this.props;
     const {
       tasks,
-      enteredPoints,
-      enteredTask,
-      enteredPool,
     } = this.state;
 
     return (
@@ -177,51 +157,8 @@ class Admin extends React.Component {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
-            <Grid container spacing={3}>
 
-              <Grid item xs={7}>
-                <LoginTextField
-                  value={enteredTask}
-                  onChange={this.updateUser.bind(this)}
-                  id="task"
-                  label="Add Task"
-                  name="task"
-                  autoComplete="username"
-                />
-              </Grid>
-
-              <Grid item xs={2}>
-                <SelectPoints
-                  options={['Studies', 'Self Care', 'Friends', 'Relationship']}
-                  title="Pool"
-                  value={enteredPool}
-                  handleChange={this.updatePool.bind(this)}
-                />
-              </Grid>
-
-              <Grid item xs={2}>
-                <SelectPoints
-                  options={[1, 3, 5]}
-                  title="Point Value"
-                  value={enteredPoints}
-                  handleChange={this.updatePoints.bind(this)}
-                />
-              </Grid>
-
-
-              <Grid item xs={1}>
-                <Fab
-                  onClick={() => this.sendTask()}
-                  size="small"
-                  color="secondary"
-                  aria-label="add"
-                  className={classes.margin}
-                >
-                  <AddIcon />
-                </Fab>
-              </Grid>
-
-            </Grid>
+            <AddTask handleSave={this.sendTask.bind(this)} />
 
             <Grid container spacing={3}>
 
@@ -235,6 +172,7 @@ class Admin extends React.Component {
                       <TableCell>Task</TableCell>
                       <TableCell>Pool</TableCell>
                       <TableCell align="right">Points</TableCell>
+                      <TableCell align="right">Admin</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -246,6 +184,18 @@ class Admin extends React.Component {
                             <TableCell>{row.task}</TableCell>
                             <TableCell>{row.pool}</TableCell>
                             <TableCell align="right">{row.points}</TableCell>
+                            <TableCell align="right">
+                              <Fab
+                                onClick={() => this.deleteTask(row.id)}
+                                size="small"
+                                color="secondary"
+                                aria-label="add"
+                                className={classes.margin}
+                              >
+                                <ThumbDown />
+                              </Fab>
+                            </TableCell>
+
                           </TableRow>
                         );
                       })}
