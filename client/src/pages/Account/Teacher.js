@@ -13,8 +13,10 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import { AddTask } from '../../components/Form';
+import { AddTask, TeamForm } from '../../components/Form';
 import TasksGrid from '../../components/Cards/TaskGrid';
+import TeamCard from '../../components/Cards/TeamCard';
+import TeamPhoto from '../Community/TeamPhoto';
 
 import CreateCommunity from '../Community/CreateCommunity';
 
@@ -153,6 +155,7 @@ class Teacher extends React.Component {
     return (
       <div className={classes.root}>
 
+
         <Grid container spacing={3} className={classes.container}>
 
           <Grid item xs={3}>
@@ -218,7 +221,7 @@ class Teacher extends React.Component {
             </TabPanel>
             <TabPanel value={value} index={2}>
               Item Three
-              <CreateCommunity
+              <TeamForm
                 handleSave={this.handleTeamSave.bind(this)}
               />
             </TabPanel>

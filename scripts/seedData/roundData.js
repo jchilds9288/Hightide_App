@@ -1,4 +1,7 @@
+const roundStatuses = require('./roundStatusData');
+
 module.exports = [{
-  dailyGoal: 25,
-  roundGoal: 400,
+  goal: 400,
+  dailyMax: 25,
+  roundStatus: roundStatuses,
 }];

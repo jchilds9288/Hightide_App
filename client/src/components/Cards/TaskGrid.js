@@ -19,8 +19,8 @@ const styles = theme => ({
   },
   margin: {
     marginTop: theme.spacing(2),
-    width: '150px',
-    height: '150px',
+    width: '175px',
+    height: '175px',
   },
   titles: {
     textAlign: 'center',

@@ -76,6 +76,15 @@ function Login(props) {
       });
   };
 
+  const handleLogin = () => {
+    console.log('hi');
+    API.testLogin()
+      .then((result) => {
+        console.log('i have returned from the test')
+        console.log(JSON.stringify(result));
+      })
+  }
+
   return (
     <div className="col-sm-8 col-sm-offset-2">
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -93,6 +102,9 @@ function Login(props) {
             <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
             <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
               Sign In
+            </Button>
+            <Button onClick={() => handleLogin()} fullWidth variant="contained" color="primary" className={classes.submit}>
+              Test Login
             </Button>
             <br />
             <Grid container>

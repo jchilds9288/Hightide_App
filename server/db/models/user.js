@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const { Types: { ObjectId } } = require('mongoose');
 
 const { Schema } = mongoose;
 const SALT_WORK_FACTOR = 10;
@@ -25,9 +26,12 @@ const UserSchema = new Schema({
     trim: true,
     default: 'student',
   },
-  account: {
-    team: { type: Schema.Types.ObjectId, ref: 'Account', required: true },
-  },
+  teams: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Team',
+    },
+  ],
 }, { autoIndex: false });
 
 UserSchema.set('toJSON', { getters: true, virtuals: true });

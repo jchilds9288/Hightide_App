@@ -65,6 +65,7 @@ class Dashboard extends React.Component {
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
+
               <Grid item xs={4}>
                 <Button variant="contained" color="primary">
                 Add Task

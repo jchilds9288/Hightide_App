@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const User = require('./user');
 
-const poolSchema = new Schema ({
-    name: {type: String, required: true},
-    created: {type: Date, default: Date.now}
-});
+const { Schema } = mongoose.Schema;
+
+// const poolSchema = new Schema({
+//   name: { type: String, required: true },
+//   created: { type: Date, default: Date.now },
+// });
 
 // schema.methods.getAlbums = function() {
 //   return mongoose
@@ -19,5 +19,5 @@ const poolSchema = new Schema ({
 //     .find({ playlists: this._id })
 // }
 
-mongoose.model('Pool', poolSchema);
-module.exports = poolSchema;
+// mongoose.model('Pool', poolSchema);
+// module.exports = poolSchema;

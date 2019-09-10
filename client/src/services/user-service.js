@@ -57,9 +57,7 @@ const logout = () =>  {
 // }
 
 // const userService = {
-//   login,
-//   logout,
-//   getAll,
+//   getTasks,
 // };
-//
-// export default userService;
+
+export default userService;

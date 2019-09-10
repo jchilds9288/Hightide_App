@@ -8,9 +8,18 @@ const taskSchema = new Schema({
     ref: 'User',
     required: true,
   },
-  title: { type: String, required: true },
-  points: { type: Number, required: true },
-  proofRequired: { type: Boolean, required: false },
+  title: {
+    type: String,
+    required: true,
+  },
+  points: {
+    type: Number,
+    required: true,
+  },
+  proofRequired: {
+    type: Boolean,
+    required: false,
+  },
   created: {
     type: Date,
     default: Date.now,
@@ -18,7 +27,12 @@ const taskSchema = new Schema({
   pool: {
     type: String,
     default: 'Happy',
-  }
+  },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 }, { autoIndex: false });
 
 

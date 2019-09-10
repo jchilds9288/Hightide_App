@@ -41,25 +41,11 @@ router.post('/', (req, res, next) =>  {
     })
 })
 
-router.post('/login', (req, res, next) =>  {
-  console.log(`searching for ${JSON.stringify(req.body)}`)
-  return mongoose.model('User', User)
-    .find(req.body)
-    .then((user) => {
-      console.log(`i found: ${JSON.stringify(user)}`)
-      return res.status(201).json(user)
-    })
-    .then(null, next)
-    .catch(err => {
-      return console.log(err)
-    })
-})
-
 
 router.get('/', (req, res, next) =>  {
-  console.log(`searching for ${JSON.stringify(req.body)}`);
-  console.log(`searching for ${JSON.stringify(req.query)}`);
-  console.log(`searching for ${JSON.stringify(Object.keys(req))}`);
+  //console.log(`searching for ${JSON.stringify(req.body)}`);
+  //console.log(`searching for ${JSON.stringify(req.query)}`);
+  //console.log(`searching for ${JSON.stringify(Object.keys(req))}`);
 
   return mongoose.model('User', User)
     .find(req.query)
@@ -74,7 +60,7 @@ router.get('/', (req, res, next) =>  {
 })
 
 router.get('/:id/tasks', (req, res, next) =>  {
-  console.log(`searching for ${JSON.stringify(req.params.id)}`);
+//  console.log(`searching for ${JSON.stringify(req.params.id)}`);
 
   return Task
     .find({ user: new ObjectId(req.params.id) })

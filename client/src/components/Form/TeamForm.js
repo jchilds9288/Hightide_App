@@ -17,9 +17,9 @@ import AddIcon from '@material-ui/icons/Add';
 import CancelIcon from '@material-ui/icons/Cancel';
 
 import TextField from '@material-ui/core/TextField';
-import { SelectPoints, CheckBoxGroup } from '../../components/Form';
+import { SelectPoints, CheckBoxGroup } from '.';
 
-import { LoginTextField } from '../Login/loginTextField';
+import { LoginTextField } from '../../pages/Login/loginTextField';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -70,7 +70,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function CreateCommunity({ handleClose, handleSave }) {
+export default function TeamForm({ handleClose, handleSave }) {
   const classes = useStyles();
   const checkBoxLabels = [
     'Allow Hidden Tasks',
@@ -134,17 +134,13 @@ export default function CreateCommunity({ handleClose, handleSave }) {
       teamMembers,
     };
     console.log(JSON.stringify(teamObj));
-    const newTeam = await axios.post('/api/team/test', teamObj);
+    const newTeam = await axios.post('/api/team', teamObj);
     console.log(JSON.stringify(newTeam))
     handleSave(newTeam);
   };
 
   return (
     <>
-      <div className={classes.root}>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
             <Paper className={classes.paper}>
               <Typography className={classes.communityTitle} variant="h3" gutterBottom>
               Create a Community
@@ -210,23 +206,18 @@ export default function CreateCommunity({ handleClose, handleSave }) {
 
                   <Button onClick={() => addTeam()} variant="contained" color="primary" className={classes.sendBtn}>
                     <SendIcon className={clsx(classes.leftIcon, classes.iconSmall)} />
-                          Create
+                          Save
                   </Button>
                 </Grid>
 
               </Grid>
             </Paper>
 
-
-
-          </Container>
-        </main>
-      </div>
     </>
   );
 }
 
-CreateCommunity.propTypes = {
+TeamForm.propTypes = {
   classes: PropTypes.object.isRequired,
   handleClose: PropTypes.func.isRequired,
 };

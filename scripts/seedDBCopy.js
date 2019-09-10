@@ -4,10 +4,12 @@
 
 const mongoose = require('mongoose');
 const db = require('../server/db/models');
-const {
+let {
   userData,
+  taskData,
   teamData,
   roundData,
+  accountData,
 } = require('./seedData');
 
 mongoose.connect(
@@ -17,13 +19,12 @@ mongoose.connect(
 );
 
 
-const User = mongoose.model('User', db.User);
 const Task = mongoose.model('Task', db.Task);
-const Account = mongoose.model('Account', db.Account);
-const Round = mongoose.model('Round', db.Round);
+const User = mongoose.model('User', db.User);
 const Pool = mongoose.model('Pool', db.Pool);
-const Team = mongoose.model('TeamTest', db.TeamTest);
-const oldTeam = mongoose.model('Team', db.Team);
+const Team = mongoose.model('Team', db.Team);
+const Round = mongoose.model('Round', db.Round);
+const Account = mongoose.model('Account', db.Account);
 
 const addVal = (arrOfObj, key, val) => {
   arrOfObj = arrOfObj.map((obj) => {
@@ -38,24 +39,43 @@ const addVal = (arrOfObj, key, val) => {
 };
 
 const seed = async () => {
+
   try {
-    await Promise.all([
-      Task.remove({}),
-      User.remove({}),
-      Pool.remove({}),
-      Team.remove({}),
-      oldTeam.remove({}),
-      Round.remove({}),
-      Account.remove({}),
+    await Promise.all([Task.remove({}), User.remove({}), Pool.remove({}),
+      Team.remove({}), Round.remove({}), Account.remove({}),
     ]);
 
+    const acct = await Account.insertMany(accountData);
+    console.log(`${acct.length} acct tasks records inserted!`);
+    console.log(acct);
+    userData = addVal(userData, 'account', acct[0]._id);
+    console.log('userData: ', JSON.stringify(userData));
     const users = await User.collection.insertMany(userData);
     console.log('users: ', JSON.stringify(users));
     console.log(`${users.result.n} users tasks records inserted!`);
 
+    teamData[0].members = users.ops;
+    console.log(JSON.stringify(teamData));
+
+    taskData.forEach((task, i) => {
+      taskData[i].user = users.ops[Math.floor(Math.random() * 4)]._id;
+    });
+
+    const tasks = await Task.collection.insertMany(taskData);
+    console.log(`${tasks.result.n} tasks records inserted!`);
+
     const teams = await Team.collection.insertMany(teamData);
     console.log(`${teams.result.n} teams records inserted!`);
-  } catch (e) {
+
+    roundData.forEach((round) => {
+      round.team = [teams.ops];
+    });
+
+    const rounds = await Round.collection.insertMany(roundData);
+    console.log(`${rounds.result.n} rounds records inserted!`);
+  }
+
+  catch (e) {
     console.log(`there was a prob!: ${e}`);
   }
 };

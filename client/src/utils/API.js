@@ -40,8 +40,9 @@ export default {
     return axios.get('/api/user', {})
   },
 
-    login:(userData) => {
-      console.log('posting...')
-        return axios.post('/api/user/login', userData)
-    }
+  login: (userData) => {
+    console.log('sending it off!!...')
+      return axios.post('/api/login', userData);
+  },
+
 };

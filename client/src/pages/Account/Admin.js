@@ -3,7 +3,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -13,28 +12,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 import ThumbDown from '@material-ui/icons/ThumbDown';
 
-import { SelectPoints } from '../../components/Form';
 
 import Title from '../Profile/Title';
-import { LoginTextField } from '../Login/loginTextField';
 
 import { AddTask } from '../../components/Form';
-
-// Generate Order Data
-function createData(id, date, task, givenTo, pool, points) {
-  return { id, date, task, givenTo, pool, points };
-}
-
-const rows = [
-  createData(0, '16 Mar, 2019', 'Hung up towel', 'Chores', 1),
-  createData(1, '16 Mar, 2019', 'Woke up early', 'Productivity', 5),
-  createData(2, '16 Mar, 2019', 'Made breakfast', 'Self Care', 3),
-  createData(3, '16 Mar, 2019', 'Worked out', 'Self Care', 3),
-  createData(4, '15 Mar, 2019', 'Phonecall with friend', 'Friendship', 5),
-];
 
 const styles = theme => ({
   root: {
@@ -77,15 +60,11 @@ class Admin extends React.Component {
     super(props);
     this.state = {
       tasks: [],
-      enteredTask: '',
-      enteredPoints: 3,
-      enteredPool: 'General',
     };
   }
 
   async componentDidMount() {
     const { data: userTasks } = await axios.get(`/api/user/${'5d4497175b7a5c2b0e396349'}/tasks`);
-  //  console.log(`tasks!: ${JSON.stringify(userTasks)}`)
     const formattedTasks = userTasks.map((task, i) => {
       return {
         id: task._id,
