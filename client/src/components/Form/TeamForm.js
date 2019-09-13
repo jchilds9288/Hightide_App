@@ -219,5 +219,5 @@ export default function TeamForm({ handleClose, handleSave }) {
 
 TeamForm.propTypes = {
   classes: PropTypes.object.isRequired,
-  handleClose: PropTypes.func.isRequired,
+  handleClose: PropTypes.func,
 };

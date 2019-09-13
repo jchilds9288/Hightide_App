@@ -29,7 +29,7 @@ const styles = theme => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
-  margin: {
+  taskBubble: {
     marginTop: theme.spacing(2),
     width: '175px',
     height: '175px',
@@ -54,29 +54,65 @@ const styles = theme => ({
     textAlign: 'center',
     fontFamily: 'Russo One, sans-serif',
   },
-  blue: {
+  blueSelect: {
     backgroundColor: '#3f51b5',
     '&:hover': {
       background: '#7f8bcb',
     },
+    color: 'white',
   },
-  yellow: {
+  blueDeselect: {
+    backgroundColor: 'white',
+    '&:hover': {
+      background: '#7f8bcb',
+    },
+    color: '#3f51b5',
+    border: '6px solid #3f51b5',
+  },
+  yellowSelect: {
     backgroundColor: '#ffd344',
     '&:hover': {
       background: '#ffe386',
     },
+    color: 'white',
   },
-  red: {
+  yellowDeselect: {
+    backgroundColor: 'white',
+    '&:hover': {
+      background: '#ffe386',
+    },
+    color: '#ffd344',
+    border: '6px solid #ffd344',
+  },
+  redSelect: {
     backgroundColor: '#da413c',
     '&:hover': {
       background: '#f27773',
     },
+    color: 'white',
   },
-  green: {
+  redDeselect: {
+    backgroundColor: 'white',
+    '&:hover': {
+      background: '#f27773',
+    },
+    color: '#da413c',
+    border: '6px solid #da413c',
+  },
+  greenSelect: {
     backgroundColor: '#26a24a',
     '&:hover': {
       background: '#55c776',
     },
+    color: 'white',
+  },
+  greenDeselect: {
+    backgroundColor: 'white',
+    '&:hover': {
+      background: '#55c776',
+    },
+    color: '#26a24a',
+    border: '6px solid #26a24a',
   },
 });
 
@@ -94,23 +130,42 @@ class Tasks extends React.Component {
 
 componentDidMount() {
     console.log('asdfasdfasdf')
-    axios.get(`/api/user/${this.props.id}/tasks`)
+    axios.get(`/api/user/${this.props.id}/tasks/round`)
       .then((userTasks) => {
         console.log('aaa')
         console.log(`tasks!: ${JSON.stringify(userTasks)}`)
-        debugger;
-        const formattedTasks = userTasks.map((task, i) => {
-          return {
-            id: i,
-            date: task.created,
-            task: task.title,
-            pool: '',
-            points: task.points,
-          };
-        });
+        const { data } = userTasks;
+      //  debugger;
+        const formattedTasks = this.formatTasks(data)
+      //  debugger;
         this.setState({ tasks: formattedTasks });
       });
 
+  }
+
+  formatTasks(tasks) {
+    const { classes } = this.props;
+    const socialClass = clsx(classes.taskBubble, classes.blue);
+    const healthClass = clsx(classes.taskBubble, classes.yellow);
+    const emotionClass = clsx(classes.taskBubble, classes.red);
+    const happyClass = clsx(classes.taskBubble, classes.green);
+
+    const classMapper = {};
+    tasks.forEach((task, i) => {
+      const poolTask = {
+        id: i,
+        date: task.created,
+        task: task.title,
+        points: task.points,
+        completed: task.completed,
+      };
+      if (classMapper[task.pool]) {
+        classMapper[task.pool].push(poolTask);
+      } else {
+        classMapper[task.pool] = [poolTask];
+      }
+    });
+    return classMapper;
   }
 
   handleSave(task) {
@@ -128,23 +183,19 @@ componentDidMount() {
     });
   }
 
-  async sendTask() {
-    const {
-      enteredTask,
-      enteredPool,
-      enteredPoints
-    } = this.state;
-    const userID = '5d4497175b7a5c2b0e396349';
-    const obj = {
-      user: userID,
-      title: enteredTask,
-      points: enteredPoints,
-    };
-
-    const { data: newTask } = await axios.post(`/api/user/${'5d4497175b7a5c2b0e396349'}/tasks`, obj);
-    console.log(JSON.stringify(newTask))
-    this.handleSave(newTask);
-
+  async sendTask(task) {
+    console.log(`title: ${task.task}, completed: ${task.completed}`)
+    const { data: { tasks: newTasks } } = await axios.post(`/api/user/${'5d4497175b7a5c2b0e396349'}/tasks/round`, { title: task.task, completed: task.completed });
+    //console.log(JSON.stringify(newTasks))
+    newTasks.forEach((returnedTask) => {
+      //console.log({ title: task.title, completed: task.completed});
+        if (task.task === returnedTask.title) {
+          console.log({ title: returnedTask.title, completed: returnedTask.completed});
+        }
+    })
+    //this.handleSave(newTask);
+    const formattedTasks = this.formatTasks(newTasks)
+    this.setState({ tasks: formattedTasks });
   }
 
   updateUser(e) {
@@ -184,89 +235,52 @@ componentDidMount() {
 
   render() {
     const { classes } = this.props;
-    const socialClass = clsx(classes.margin, classes.blue);
-    const healthClass = clsx(classes.margin, classes.yellow);
-    const emotionClass = clsx(classes.margin, classes.red);
-    const happyClass = clsx(classes.margin, classes.green);
-
-    const tasks = [
-      { name: 'Task 1', class: socialClass },
-      { name: 'Task 2', class: healthClass },
-      { name: 'Task 3', class: emotionClass },
-      { name: 'Task 4', class: happyClass },
-
-      { name: 'Task 1', class: socialClass },
-      { name: 'Task 2', class: healthClass },
-      { name: 'Task 3', class: emotionClass },
-      { name: 'Task 4', class: happyClass },
-
-      { name: 'Task 1', class: socialClass },
-      { name: 'Task 2', class: healthClass },
-      { name: 'Task 3', class: emotionClass },
-      { name: 'Task 4', class: happyClass },
-
-      { name: 'Task 1', class: socialClass },
-      { name: 'Task 2', class: healthClass },
-      { name: 'Task 3', class: emotionClass },
-      { name: 'Task 4', class: happyClass },
-
-    ];
+    const socialClass = clsx(classes.taskBubble, classes.blue);
+    const healthClass = clsx(classes.taskBubble, classes.yellow);
+    const emotionClass = clsx(classes.taskBubble, classes.red);
+    const happyClass = clsx(classes.taskBubble, classes.green);
+    const colors = ['blue', 'yellow', 'red', 'green'];
 
     return (
       <div className={classes.root}>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
-            <Grid container spacing={3}>
+            <Grid container spacing={0}>
+              {Object.keys(this.state.tasks).sort().map((poolTitle, i) => {
+                return (
+                  <Grid item xs={3}>
+                    <Grid container spacing={0}>
 
-              <Grid item xs={3}>
-                <Typography className={classes.titles} variant="h4" gutterBottom>
-                  Social
-                </Typography>
-              </Grid>
-
-              <Grid item xs={3}>
-                <Typography className={classes.titles} variant="h4" gutterBottom>
-                  Health
-                </Typography>
-              </Grid>
-
-              <Grid item xs={3}>
-                <Typography className={classes.titles} variant="h4" gutterBottom>
-                  Emotion
-                </Typography>
-              </Grid>
-
-              <Grid item xs={3}>
-                <Typography className={classes.titles} variant="h4" gutterBottom>
-                  Happy
-                </Typography>
-              </Grid>
-
-            </Grid>
-
-            <Grid container spacing={3}>
-
-
-              {
-                tasks.map((task) => {
-                  return (
-                    <Grid item xs={3}>
-                      <Fab
-                        onClick={() => this.sendTask()}
-                        size="small"
-                        color="secondary"
-                        aria-label="add"
-                        className={task.class}
-                      >
-                        <Typography className={classes.taskTitle} variant="h5" gutterBottom>
-                          {task.name}
+                      <Grid item xs={12}>
+                        <Typography className={classes.titles} variant="h4" gutterBottom>
+                          {poolTitle}
                         </Typography>
-                      </Fab>
+                      </Grid>
+
+                      {this.state.tasks[poolTitle].map((task) => {
+                        const taskColor = colors[i];
+                        const taskState = task.completed ? 'Select' : 'Deselect';
+                        return (
+                          <Grid item xs={12}>
+                            <Fab
+                              onClick={() => this.sendTask(task)}
+                              size="small"
+                              color="secondary"
+                              aria-label="add"
+                              className={clsx(classes.taskBubble, classes[`${taskColor}${taskState}`])}
+                            >
+                              <Typography variant="h5" gutterBottom>
+                                {task.task}
+                              </Typography>
+                            </Fab>
+                          </Grid>
+                        )
+                      })}
                     </Grid>
-                  )
-                })
-              }
+                  </Grid>
+                )
+              })}
 
             </Grid>
 

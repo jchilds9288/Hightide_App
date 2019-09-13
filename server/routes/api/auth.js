@@ -13,5 +13,5 @@ exports.login = (req, res, next) => {
     .then(null, next)
     .catch((err) => {
       return console.log(err);
-    });
+    }); 
 };

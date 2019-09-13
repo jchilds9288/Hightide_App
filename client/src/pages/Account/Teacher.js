@@ -104,22 +104,32 @@ class Teacher extends React.Component {
       value: 0,
       users: [],
       selectedUser: {},
+      tasks: [],
+      teamTasks: [],
     };
   }
 
   async componentDidMount() {
-    const { data: users } = await axios.get('/api/user', {});
-    const tasks = await this.getUserTasks(users[0]);
-    console.log('users: ', JSON.stringify(users));
-    console.log('tasks: ', JSON.stringify(tasks));
+    console.log('trying to get team data...')
+  //  const { data: { players } } = await axios.get('/api/user', {});
+    const teamID = '5d4497175b7a5c2b0e396380';
+    const { data: team } = await axios.get(`/api/team/${teamID}`);
+    console.log('team: ', JSON.stringify(team));
+    const teamTasks = team.tasks;
+    const { players } = team;
+    console.log('players: ', JSON.stringify(players));
+    const userTasks = await this.getUserTasks(players[0]);
+    console.log('userTasks: ', JSON.stringify(userTasks));
+    // console.log('tasks: ', JSON.stringify(tasks));
 
-    this.setState({ users, selectedUser: users[0], tasks });
+    this.setState({ users: players, selectedUser: players[0], teamTasks: teamTasks, tasks: userTasks });
   }
 
   async getUserTasks(user) {
-    const { data: tasks } = await axios.get(`/api/user/${user.id}/tasks`);
-    console.log('tasks: ', JSON.stringify(tasks))
-    return tasks;
+    console.log('getting tasks?...')
+    const { data: { createdTasks} } = await axios.get(`/api/user/${user.id}/tasks`);
+    console.log('tasks: ', JSON.stringify(createdTasks))
+    return createdTasks;
   }
 
   handleChange(e, value) {
@@ -128,8 +138,8 @@ class Teacher extends React.Component {
 
   async switchUser(e) {
     console.log(`switching to ${e}`)
-    const { data: tasks } = await axios.get(`/api/user/${e.id}/tasks`);
-    this.setState({ selectedUser: e, tasks })
+    const { data: { createdTasks } }= await axios.get(`/api/user/${e.id}/tasks`);
+    this.setState({ selectedUser: e, tasks: createdTasks })
   }
 
   async handleTaskSave(stuff) {
@@ -151,7 +161,10 @@ class Teacher extends React.Component {
       users,
       selectedUser,
       tasks,
+      teamTasks,
     } = this.state;
+
+    const totalTasks = [...teamTasks, ...tasks];
     return (
       <div className={classes.root}>
 
@@ -211,7 +224,7 @@ class Teacher extends React.Component {
               <Grid container spacing={3}>
 
                 <AddTask handleSave={this.handleTaskSave.bind(this)} />
-                <TasksGrid tasks={tasks} />
+                <TasksGrid tasks={totalTasks} />
 
               </Grid>
 

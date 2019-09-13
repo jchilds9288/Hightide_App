@@ -8,7 +8,7 @@ const pointsSchema = new Schema({
   round: { type: Schema.Types.ObjectId, ref: 'Round', required: true },
   created: { type: Date, default: Date.now },
   task: { type: Schema.Types.ObjectId, ref: 'Task', required: true },
-}, { autoIndex: false });
+});
 
 mongoose.model('Points', pointsSchema);
 

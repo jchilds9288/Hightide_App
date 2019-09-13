@@ -10,16 +10,27 @@ const {
   roundStatusSchema,
 } = require('../../../server/db/models/teamTest');
 
-const newTeam = mongoose.model('TeamTest', teamSchema);
 //const newRound = mongoose.model('Round', teamSchema);
 //const newRoundStatus = mongoose.model('TeamTest', teamSchema);
 
-const Team = mongoose.model('Team', db.Team);
-const Round = mongoose.model('Round', db.Round);
+const { TeamTest: Team, Round } = db;
+
 router.get('/', (req, res, next) => {
   console.log('finding a team')
   newTeam.find({})
     .then(teams => res.status(200).send(teams))
+    .then(null, next);
+});
+
+router.get('/:id', (req, res, next) => {
+  console.log('finding a team')
+  const teamID =  new ObjectId(req.params.id);
+  Team.findOne({ _id: teamID })
+    .populate('players')
+    .then((team) => {
+      console.log(`i got ${JSON.stringify(team)}`)
+      res.status(200).send(team)
+    })
     .then(null, next);
 });
 

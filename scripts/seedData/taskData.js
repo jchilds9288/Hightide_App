@@ -7,6 +7,7 @@ module.exports = [
     proofRequired: false,
     pool: 'Health',
     createdBy: new ObjectId('5d4497175b7a5c2b0e396349'),
+    completed: true,
   },
   {
     title: 'Reach out to a Friend',
@@ -21,6 +22,7 @@ module.exports = [
     proofRequired: false,
     pool: 'Social',
     createdBy: new ObjectId('5d4497175b7a5c2b0e396349'),
+    completed: true,
   },
   {
     title: 'Play Fetch with hatch',
@@ -63,6 +65,7 @@ module.exports = [
     proofRequired: false,
     pool: 'Emotion',
     createdBy: new ObjectId('5d4497175b7a5c2b0e396349'),
+    completed: true,
   },
   {
     title: 'Give a Hug',

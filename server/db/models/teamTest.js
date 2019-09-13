@@ -3,103 +3,20 @@ const { Types: { ObjectId } } = require('mongoose');
 
 const { Schema } = mongoose;
 
-const Task = new Schema({
-  created: {
-    type: Date,
-    default: Date.now,
-  },
-  userID: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  points: {
-    type: Number,
-    required: true,
-    default: 3,
-  },
-});
-
-const roundStatusSchema = new Schema({
-  userID: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  partnerID: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  points: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  tasks: {
-    type: [Task],
-    required: true,
-    default: [],
-  },
-});
-
-const roundSchema = new Schema({
-  started: {
-    type: Date,
-    default: Date.now,
-  },
-  goal: {
-    type: Number,
-    default: 300,
-  },
-  dailyMax: {
-    type: Number,
-    default: 25,
-  },
-  roundStatus: {
-    type: [roundStatusSchema],
-    required: true,
-    default: [],
-  },
-});
-
-const teamTask = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  created: {
-    type: Date,
-    default: Date.now,
-  },
-  points: {
-    type: Number,
-    required: true,
-  },
-  proofRequired: {
-    type: Boolean,
-    required: false,
-  },
-  pool: {
-    type: String,
-    default: 'Happy',
-  },
-  createdBy: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-}, { autoIndex: false });
+const teamTaskSchema = require('./teamTask');
+//const roundSchema = require('./round');
 
 const teamSchema = new Schema({
   name: {
     type: String,
     required: true,
   },
+  players: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    default: [],
+  }],
   admins: [{
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -110,17 +27,18 @@ const teamSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  rounds: {
-    type: [roundSchema],
+  rounds: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Round',
     required: true,
     default: [],
-  },
+  }],
   tasks: {
-    type: [teamTask],
+    type: [teamTaskSchema],
     required: true,
     default: [],
   },
-}, { autoIndex: false });
+});
 
 //mongoose.model('Team', teamSchema);
 //module.exports = teamSchema;
@@ -159,9 +77,6 @@ const run = () => {
 };
 
 //run();
-module.exports = {
-  teamSchema,
-  roundSchema,
-  roundStatusSchema,
-  teamTask,
-};
+const TeamTest = mongoose.model('TeamTest', teamSchema);
+
+module.exports = TeamTest;

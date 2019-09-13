@@ -9,7 +9,8 @@ const mongoose = require('mongoose');
 const db = require('../../../server/db/models');
 const { Types: { ObjectId }} = require('mongoose');
 
-const Task = mongoose.model('Task', db.Task);
+//onst Task = mongoose.model('Task', db.Task);
+const { TeamTest, Round, RoundStatus } = db;
 
 // router.route("/user")
 //   .post(controller.createUser);
@@ -46,27 +47,99 @@ router.get('/', (req, res, next) =>  {
   //console.log(`searching for ${JSON.stringify(req.body)}`);
   //console.log(`searching for ${JSON.stringify(req.query)}`);
   //console.log(`searching for ${JSON.stringify(Object.keys(req))}`);
-
-  return mongoose.model('User', User)
+  req.query = { _id: new ObjectId('5d4497175b7a5c2b0e396349') };
+  console.log(`trying to grab ${JSON.stringify(req.query)}`)
+  return User
     .find(req.query)
     .then((user) => {
       console.log(`i found these users: ${JSON.stringify(user)}`)
       return res.status(200).json(user)
     })
-    .then(null, next)
     .catch(err => {
+      console.log(`prob: ${err}`)
       return console.log(err)
     })
 })
-
-router.get('/:id/tasks', (req, res, next) =>  {
+router.get('/:id/tasks/round', (req, res, next) =>  {
 //  console.log(`searching for ${JSON.stringify(req.params.id)}`);
 
-  return Task
-    .find({ user: new ObjectId(req.params.id) })
-    .then((tasks) => {
-      console.log(`i found these tasks: ${JSON.stringify(tasks)}`)
+  return RoundStatus.findOne({
+    roundID: new ObjectId('5d4497175b7a5c2b0e396381'),
+    userID: new ObjectId('5d4497175b7a5c2b0e396349'),
+  })
+    .select('tasks')
+    .then((result) => {
+    //  console.log(`holy shit i found a team: ${JSON.stringify(result.rounds[0].roundStatus[0].tasks)}`)
+      console.log(`am i a thing: ${JSON.stringify(result.tasks[0])}`)
+      const tasks = result.tasks;
       return res.status(200).json(tasks);
+    })
+    .then(null, next)
+    .catch((err) => {
+      return console.log(err)
+    });
+})
+
+//Model.findOneAndUpdate({ name : 'myBook', "data._id" : 'chapter' }, { "data.$.name" : 'Chapter 1' });
+
+router.post('/:id/tasks/round', (req, res, next) =>  {
+//  console.log(`searching for ${JSON.stringify(req.params.id)}`);
+  console.log(`bod: ${JSON.stringify(req.body)}`)
+  let taskDone = false;
+  const { completed, title } = req.body;
+  console.log(`is ${title} completed: ${completed}`);
+  console.log(`!completed: ${!completed}`);
+  return RoundStatus.findOneAndUpdate(
+    {
+      roundID: new ObjectId('5d4497175b7a5c2b0e396381'),
+      userID: new ObjectId('5d4497175b7a5c2b0e396349'),
+      'tasks.title': title,
+    },
+    {
+      $set: {
+        'tasks.$.completed': !completed,
+      },
+    },
+    { new: true },
+  ).then((result) => {
+    //console.log(`hayyy: ${JSON.stringify(result)}`);
+    result.tasks.forEach((task) => {
+      if (task.title === title) {
+        console.log(JSON.stringify(task))
+      }
+    })
+    result.save();
+    return res.status(200).json(result);
+  })
+    .catch((err) => {
+      console.log(`err: ${err}`);
+    });
+  // return TeamTest.findOne({
+  //   _id: new ObjectId('5d4497175b7a5c2b0e396380'),
+  // })
+  //   .select('rounds')
+  //   .then((result) => {
+  //   //  console.log(`holy shit i found a team: ${JSON.stringify(result.rounds[0].roundStatus[0].tasks)}`)
+  //     console.log(`am i a thing: ${JSON.stringify(result.rounds[0].roundStatus[0].tasks[0])}`)
+  //     result.rounds[0].roundStatus[0].tasks[0].completed = false;
+  //     console.log(JSON.stringify(result.rounds[0].roundStatus[0]))
+  //     result.save();
+  //     return res.status(200).json(result);
+  //   })
+  //   .then(null, next)
+  //   .catch((err) => {
+  //     return console.log(err)
+  //   });
+})
+
+router.get('/:id/tasks', (req, res, next) =>  {
+  console.log(`searching for ${JSON.stringify(req.params.id)}`);
+  const userID =  new ObjectId(req.params.id);
+  return User
+    .findOne({ _id: userID })
+    .then((user) => {
+      console.log(`i found this user: ${JSON.stringify(user)}`)
+      return res.status(200).json(user);
     })
     .then(null, next)
     .catch((err) => {

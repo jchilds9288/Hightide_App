@@ -6,6 +6,10 @@ const { Schema } = mongoose;
 const SALT_WORK_FACTOR = 10;
 
 const UserSchema = new Schema({
+  _id: {
+    type: Schema.ObjectId,
+    auto: true,
+  },
   email: {
     type: String,
     required: true,
@@ -32,7 +36,7 @@ const UserSchema = new Schema({
       ref: 'Team',
     },
   ],
-}, { autoIndex: false });
+});
 
 UserSchema.set('toJSON', { getters: true, virtuals: true });
 
@@ -68,6 +72,6 @@ UserSchema.methods.comparePassword = (candidatePassword, cb) => {
 };
 
 
-mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
-module.exports = UserSchema;
+module.exports = User;
