@@ -64,8 +64,9 @@ class Admin extends React.Component {
   }
 
   async componentDidMount() {
-    const { data: userTasks } = await axios.get(`/api/user/${'5d4497175b7a5c2b0e396349'}/tasks`);
-    const formattedTasks = userTasks.map((task, i) => {
+    const { data: { createdTasks } } = await axios.get(`/api/user/${'5d4497175b7a5c2b0e396349'}/tasks`);
+    console.log(`createdTasks: ${JSON.stringify}`);
+    const formattedTasks = createdTasks.map((task, i) => {
       return {
         id: task._id,
         date: task.created,

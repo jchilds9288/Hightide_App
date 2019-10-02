@@ -42,7 +42,7 @@ const MadeWithLove = () => ((
   </Typography>
 ));
 
-export default function SignUp() {
+const SignUp = () => {
   const classes = useStyles();
 
   const [signUpForm, setValues] = useState({
@@ -62,15 +62,14 @@ export default function SignUp() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    API.addUser(signUpForm)
-      .then((result) => {
-        console.log('i have returned', JSON.stringify(result));
-      })
-      .catch((err) => {
-        console.log(`uh oh: ${err}`);
-      });
+    try {
+      const result = await API.addUser(signUpForm);
+      console.log('i have returned', JSON.stringify(result));
+    } catch (e) {
+      console.log(`uh oh: ${e}`);
+    }
   };
 
   return (
@@ -99,3 +98,5 @@ export default function SignUp() {
     </Grid>
   );
 }
+
+export default SignUp;

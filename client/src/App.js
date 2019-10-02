@@ -10,6 +10,7 @@ import { Teams } from './pages/Community';
 import Admin, { Teacher } from './pages/Account';
 import Tasks from './pages/Tasks';
 import Nav from './components/NavHome'
+import { SignUp } from './pages/SignUp';
 
 
 const useStyles = makeStyles(theme => ({
@@ -31,7 +32,7 @@ function App() {
         <Route path="/admin" component={Admin} />
         <Route path="/tasks" component={Tasks} />
         <Route path="/teacher" component={Teacher} />
-
+        <Route path="/register" component={SignUp} />
       </div>
     </Router>
   );

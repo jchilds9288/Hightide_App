@@ -45,8 +45,7 @@ function MadeWithLove() {
   );
 }
 
-function Login(props) {
-
+const Login = (props) => {
   const classes = useStyles();
 
   const [loginForm, setValues] = useState({
@@ -61,29 +60,19 @@ function Login(props) {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(`sending ${JSON.stringify(loginForm)}`)
-  //  const { history } = this.props;
-    API.login(loginForm)
-      .then((result) => {
-        console.log('i have returned')
-        console.log(JSON.stringify(result));
-        props.history.push('/profile');
-      })
-      .catch((err) => {
-        console.log(`uh oh: ${err}`)
-      });
+    console.log(`sending ${JSON.stringify(loginForm)}`);
+    try {
+      const { accessToken } = API.login(loginForm);
+      console.log('i have returned');
+      localStorage.accessToken = accessToken;
+      localStorage.email = loginForm.email;
+      props.history.push('/profile');
+    } catch (e) {
+      console.log(`uh oh: ${e}`);
+    }
   };
-
-  const handleLogin = () => {
-    console.log('hi');
-    API.testLogin()
-      .then((result) => {
-        console.log('i have returned from the test')
-        console.log(JSON.stringify(result));
-      })
-  }
 
   return (
     <div className="col-sm-8 col-sm-offset-2">
@@ -103,9 +92,7 @@ function Login(props) {
             <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
               Sign In
             </Button>
-            <Button onClick={() => handleLogin()} fullWidth variant="contained" color="primary" className={classes.submit}>
-              Test Login
-            </Button>
+
             <br />
             <Grid container>
               <Grid item xs>

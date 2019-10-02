@@ -15,11 +15,6 @@ import Box from '@material-ui/core/Box';
 
 import { AddTask, TeamForm } from '../../components/Form';
 import TasksGrid from '../../components/Cards/TaskGrid';
-import TeamCard from '../../components/Cards/TeamCard';
-import TeamPhoto from '../Community/TeamPhoto';
-
-import CreateCommunity from '../Community/CreateCommunity';
-
 
 function TabPanel(props) {
   const {
@@ -122,7 +117,7 @@ class Teacher extends React.Component {
     console.log('userTasks: ', JSON.stringify(userTasks));
     // console.log('tasks: ', JSON.stringify(tasks));
 
-    this.setState({ users: players, selectedUser: players[0], teamTasks: teamTasks, tasks: userTasks });
+    this.setState({ teamName: team.name, users: players, selectedUser: players[0], teamTasks: teamTasks, tasks: userTasks });
   }
 
   async getUserTasks(user) {
@@ -162,13 +157,16 @@ class Teacher extends React.Component {
       selectedUser,
       tasks,
       teamTasks,
+      teamName
     } = this.state;
 
     const totalTasks = [...teamTasks, ...tasks];
     return (
       <div className={classes.root}>
 
-
+        <Typography className={classes.communityTitle} variant="h3" gutterBottom>
+          {teamName}
+        </Typography>
         <Grid container spacing={3} className={classes.container}>
 
           <Grid item xs={3}>

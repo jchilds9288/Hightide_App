@@ -235,10 +235,6 @@ componentDidMount() {
 
   render() {
     const { classes } = this.props;
-    const socialClass = clsx(classes.taskBubble, classes.blue);
-    const healthClass = clsx(classes.taskBubble, classes.yellow);
-    const emotionClass = clsx(classes.taskBubble, classes.red);
-    const happyClass = clsx(classes.taskBubble, classes.green);
     const colors = ['blue', 'yellow', 'red', 'green'];
 
     return (
